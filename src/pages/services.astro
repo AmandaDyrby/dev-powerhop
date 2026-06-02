@@ -26,11 +26,11 @@ import productspread from "../assets/productspread.png";
 
       <ProductComparisonTable />
 
-      <div
-        class="pt-0 place-self-center lg:col-start-2 flex flex-col items-center"
+      <!-- <div
+        class="pt-0 place-self-end lg:col-start-2 flex flex-col items-end pr-4"
       >
         <p
-          class="pb-4 font-sans capitalize text-center text-light-primary text-lg tracking-widest"
+          class="pb-4 font-sans capitalize text-right text-brand text-lg tracking-widest"
         >
           ₦0 STARTUP COST
         </p>
@@ -40,25 +40,46 @@ import productspread from "../assets/productspread.png";
           text="GET STARTED →"
           class="sticky-get-started"
         />
-      </div>
+      </div> -->
+    </div>
+
+    <div class="bg-light-bg p-6 border border-light-muted mt-12">
+      <h2 class="font-display text-light-primary text-4xl font-black">
+        No hidden fees, <span class="text-brand">an all in one solution</span>
+      </h2>
+      <p class="font-sans text-light-secondary text-md py-4">
+        No matter which Power/Hop product you choose, the startup fee will
+        always be <span class="text-brand">₦0</span>. And if you unit stops
+        working, we will replace or repair it in less than 48 hours at no
+        additional costs. <br /> All units are equipped to charge automatically, so
+        all you have to worry about is the stuff that matters to you. <br /> You can
+        also pause your subscription at any time for no additional fee, so you can
+        rest assured that you won't be paying for something you aren't using.
+      </p>
+      <Button
+        href="/booking/"
+        variant={3}
+        text="GET STARTED →"
+        class="sticky-get-started"
+      />
     </div>
 
     <div class="productcardlist">
       <ProductCard
         name="Power/Hop1000"
-        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi eleifend orci nec nunc sollicitudin venenatis."
+        description="For the small household or business, the Power/Hop1000 provides up to 1,000 Wh of stored power, enough to keep your fridge, TV and a few lights or chargers running for hours."
         image={powerhop1000}
         link="/powerhop1000/"
       />
       <ProductCard
         name="Power/Hop2000"
-        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi eleifend orci nec nunc sollicitudin venenatis."
+        description="For the medium household or business, the Power/Hop2000 provides up to 2,000 Wh of stored power, enough to keep your fridge, TV, washing machine and a few lights or chargers running for hours."
         image={powerhop2000}
         link="/powerhop2000/"
       />
       <ProductCard
         name="Power/Hop8000"
-        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi eleifend orci nec nunc sollicitudin venenatis."
+        description="For the large household or business, the Power/Hop8000 provides up to 8,000 Wh of stored power, enough to keep plenty of appliances running for hours, including your fridge, TV, washing machine, lights and even your AC unit."
         image={powerhop8000}
         link="/powerhop8000/"
       />
@@ -69,8 +90,12 @@ import productspread from "../assets/productspread.png";
         Need a hand<span class="text-brand">?</span>
       </h2>
       <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi eleifend
-        orci nec nunc sollicitudin venenatis.
+        We might have the answer to your question in our <a
+          href="/faq/"
+          class="text-brand underline">FAQ</a
+        > — but if you can't find what you're looking for, don't hesitate to reach
+        out to our support team. We're here to help you get the most out of your Power/Hop
+        experience.
       </p>
       <Button
         href="/faq/"

@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import editIconGreen from "../assets/edit_green.svg";
+import editIconMuted from "../assets/edit_muted.svg";
 
 interface Props {
   unit?: string;
@@ -29,10 +30,12 @@ interface Props {
   </p>
   <p class="font-mono pb-2">Card: <b>{Astro.props.card || "N/A"}</b></p>
   <p class="font-mono pb-2">
-    Next Payment Status: <b>{Astro.props.nextPaymentStatus || "N/A"}</b>
+    Next Payment Status: <span class="text-brand underline underline-offset-4"
+      ><b>{Astro.props.nextPaymentStatus || "N/A"}</b></span
+    >
   </p>
   <div class="flex gap-2 justify-end pt-3">
-    <img src={editIconGreen.src} alt="icon make change" />
-    <p class="font-sans text-brand underline italic text-base">Make Change</p>
+    <img src={editIconMuted.src} alt="icon make change" />
+    <p class="font-sans text-light-muted italic text-base">Make Change</p>
   </div>
 </div>
