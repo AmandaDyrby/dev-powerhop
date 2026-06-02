@@ -11,60 +11,82 @@ interface Props {
 }
 
 const { images } = Astro.props;
+
+const hasMultipleImages = images.length > 1;
 ---
 
-<section class="product-carousel" aria-label="Product images" tabindex="0">
-  <button
-    class="carousel-arrow carousel-arrow-left"
-    type="button"
-    aria-label="Previous product image"
-    data-carousel-previous></button>
+<section
+  class:list={["product-carousel", !hasMultipleImages && "single-image"]}
+  aria-label="Product images"
+  tabindex="0"
+>
+  {
+    hasMultipleImages && (
+      <button
+        class="carousel-arrow carousel-arrow-left"
+        type="button"
+        aria-label="Previous product image"
+        data-carousel-previous
+      />
+    )
+  }
 
   <div class="carousel-frame">
     {
-      images.map((image, index) =>
-        typeof image.src === "string" ? (
-          <img
-            src={image.src}
-            alt={image.alt}
-            class={`carousel-image ${index === 0 ? "is-active" : ""}`}
-            loading={index === 0 ? "eager" : "lazy"}
-            decoding="async"
-            data-carousel-image
-          />
-        ) : (
-          <Image
-            src={image.src}
-            alt={image.alt}
-            class={`carousel-image ${index === 0 ? "is-active" : ""}`}
-            width={520}
-            data-carousel-image
-          />
-        ),
+      images.length > 0 ? (
+        images.map((image, index) =>
+          typeof image.src === "string" ? (
+            <img
+              src={image.src}
+              alt={image.alt}
+              class={`carousel-image ${index === 0 ? "is-active" : ""}`}
+              loading={index === 0 ? "eager" : "lazy"}
+              decoding="async"
+              data-carousel-image
+            />
+          ) : (
+            <Image
+              src={image.src}
+              alt={image.alt}
+              class={`carousel-image ${index === 0 ? "is-active" : ""}`}
+              width={520}
+              data-carousel-image
+            />
+          ),
+        )
+      ) : (
+        <div class="carousel-placeholder">Product image coming soon</div>
       )
     }
   </div>
 
-  <button
-    class="carousel-arrow carousel-arrow-right"
-    type="button"
-    aria-label="Next product image"
-    data-carousel-next></button>
+  {
+    hasMultipleImages && (
+      <button
+        class="carousel-arrow carousel-arrow-right"
+        type="button"
+        aria-label="Next product image"
+        data-carousel-next
+      />
+    )
+  }
 
-  <div class="carousel-dots" aria-label="Choose product image">
-    {
-      images.map((_, index) => (
-        <button
-          class={`carousel-dot ${index === 0 ? "is-active" : ""}`}
-          type="button"
-          aria-label={`Show product image ${index + 1}`}
-          aria-pressed={index === 0 ? "true" : "false"}
-          data-carousel-dot
-          data-carousel-index={index}
-        />
-      ))
-    }
-  </div>
+  {
+    hasMultipleImages && (
+      <div class="carousel-dots" aria-label="Choose product image">
+        {images.map((_, index) => (
+          <button
+            class={`carousel-dot ${index === 0 ? "is-active" : ""}`}
+            type="button"
+            aria-label={`Show product image ${index + 1}`}
+            aria-pressed={index === 0 ? "true" : "false"}
+            data-carousel-dot
+            data-carousel-index={index}
+          />
+        ))}
+      </div>
+    )
+  }
 </section>
 
 <script>
@@ -85,6 +107,10 @@ const { images } = Astro.props;
   let activeIndex = 0;
 
   const showImage = (nextIndex: number) => {
+    if (images.length === 0) {
+      return;
+    }
+
     activeIndex = (nextIndex + images.length) % images.length;
 
     images.forEach((image, index) => {
@@ -126,6 +152,10 @@ const { images } = Astro.props;
     width: min(100%, 24rem);
   }
 
+  .product-carousel.single-image {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
   .carousel-frame {
     position: relative;
     display: grid;
@@ -134,6 +164,16 @@ const { images } = Astro.props;
     border: 1px solid #9f9f9f;
     background: #ffffff;
     overflow: hidden;
+  }
+
+  .carousel-placeholder {
+    width: 86%;
+    color: #737373;
+    font-family: "JetBrains Mono", "Courier New", monospace;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    text-align: center;
+    text-transform: uppercase;
   }
 
   .carousel-image {
