@@ -1,0 +1,204 @@
+---
+import infoIcon from "../assets/infoIcon.svg";
+interface Props {
+  content?: string;
+}
+
+const content = Astro.props.content ?? "";
+---
+
+<button class="moreInfoTrigger" type="button" aria-label="More info">
+  <img class="infoIcon h-4 w-4" src={infoIcon.src} alt="" />
+</button>
+<p
+  class="infoContent font-sans text-md text-light-muted border border-light-muted p-4 bg-light-surface shadow-boxShadow-light-sm"
+  role="tooltip"
+>
+  {content}
+</p>
+
+<style>
+  .moreInfoTrigger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1rem;
+    height: 1rem;
+    flex: 0 0 auto;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .infoContent {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    width: min(18rem, calc(100vw - 2rem));
+    max-height: min(16rem, calc(100vh - 2rem));
+    margin: 0;
+    overflow: auto;
+    text-transform: none;
+  }
+</style>
+
+<script>
+  const desktopQuery = window.matchMedia("(min-width: 1024px)");
+  const openPanels = new Set<HTMLElement>();
+
+  // Position the detached panel beside the trigger while keeping it inside the viewport.
+  const positionPanel = (trigger: HTMLElement, panel: HTMLElement) => {
+    const gap = 8;
+    const rect = trigger.getBoundingClientRect();
+
+    panel.style.display = "block";
+    const panelRect = panel.getBoundingClientRect();
+
+    let left = rect.left + rect.width / 2 - panelRect.width / 2;
+    let top = rect.bottom + gap;
+
+    left = Math.max(
+      gap,
+      Math.min(left, window.innerWidth - panelRect.width - gap),
+    );
+
+    if (top + panelRect.height > window.innerHeight - gap) {
+      top = rect.top - panelRect.height - gap;
+    }
+
+    if (top < gap) {
+      top = gap;
+    }
+
+    panel.style.left = `${left}px`;
+    panel.style.top = `${top}px`;
+  };
+
+  // Track open panels so resize/scroll can keep them aligned with their trigger.
+  const showPanel = (trigger: HTMLElement, panel: HTMLElement) => {
+    openPanels.add(panel);
+    trigger.classList.add("active");
+    trigger.setAttribute("aria-expanded", "true");
+    positionPanel(trigger, panel);
+  };
+
+  const hidePanel = (trigger: HTMLElement, panel: HTMLElement) => {
+    openPanels.delete(panel);
+    trigger.classList.remove("active");
+    trigger.setAttribute("aria-expanded", "false");
+    panel.style.display = "none";
+  };
+
+  // Only one info panel should be open at a time.
+  const hideOtherPanels = (currentPanel: HTMLElement) => {
+    openPanels.forEach((panel) => {
+      if (panel === currentPanel) {
+        return;
+      }
+
+      const triggerId = panel.dataset.triggerId;
+      const trigger = triggerId ? document.getElementById(triggerId) : null;
+
+      if (trigger instanceof HTMLElement) {
+        hidePanel(trigger, panel);
+      }
+    });
+  };
+
+  document
+    .querySelectorAll<HTMLElement>(".moreInfoTrigger")
+    .forEach((trigger, index) => {
+      const infoContent = trigger.nextElementSibling;
+
+      if (!(infoContent instanceof HTMLElement)) {
+        return;
+      }
+
+      const triggerId = trigger.id || `more-info-trigger-${index}`;
+      const panelId = infoContent.id || `more-info-content-${index}`;
+
+      // Connect the button and tooltip for assistive tech.
+      trigger.id = triggerId;
+      trigger.setAttribute("aria-controls", panelId);
+      trigger.setAttribute("aria-expanded", "false");
+      infoContent.id = panelId;
+      infoContent.dataset.triggerId = triggerId;
+
+      // Move the panel outside the current component/table/grid so it can overlay freely.
+      document.body.append(infoContent);
+
+      trigger.addEventListener("click", (event) => {
+        if (desktopQuery.matches) {
+          return;
+        }
+
+        event.stopPropagation();
+        hideOtherPanels(infoContent);
+
+        if (infoContent.style.display === "block") {
+          hidePanel(trigger, infoContent);
+        } else {
+          showPanel(trigger, infoContent);
+        }
+      });
+
+      trigger.addEventListener("pointerenter", () => {
+        if (!desktopQuery.matches) {
+          return;
+        }
+
+        hideOtherPanels(infoContent);
+        showPanel(trigger, infoContent);
+      });
+
+      trigger.addEventListener("pointerleave", () => {
+        if (!desktopQuery.matches) {
+          return;
+        }
+
+        hidePanel(trigger, infoContent);
+      });
+    });
+
+  document.addEventListener("click", () => {
+    if (desktopQuery.matches) {
+      return;
+    }
+
+    openPanels.forEach((panel) => {
+      const triggerId = panel.dataset.triggerId;
+      const trigger = triggerId ? document.getElementById(triggerId) : null;
+
+      if (trigger instanceof HTMLElement) {
+        hidePanel(trigger, panel);
+      }
+    });
+  });
+
+  window.addEventListener("resize", () => {
+    openPanels.forEach((panel) => {
+      const triggerId = panel.dataset.triggerId;
+      const trigger = triggerId ? document.getElementById(triggerId) : null;
+
+      if (trigger instanceof HTMLElement) {
+        positionPanel(trigger, panel);
+      }
+    });
+  });
+
+  window.addEventListener(
+    "scroll",
+    () => {
+      openPanels.forEach((panel) => {
+        const triggerId = panel.dataset.triggerId;
+        const trigger = triggerId ? document.getElementById(triggerId) : null;
+
+        if (trigger instanceof HTMLElement) {
+          positionPanel(trigger, panel);
+        }
+      });
+    },
+    { passive: true },
+  );
+</script>
