@@ -1,0 +1,347 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { Image } from "astro:assets";
+import Button from "../components/Button.astro";
+import ProductComparisonTable from "../components/ProductComparisonTable.astro";
+import ProductComparisonTable3Column from "../components/ProductComparisonTable3Column.astro";
+import ProductCard from "../components/ProductCard.astro";
+import "../styles/global.css";
+import powerhop1000 from "../assets/powerhop1000/front-1000-png.png";
+import powerhop2000 from "../assets/powerhop2000/front-2000-png.png";
+import powerhop8000 from "../assets/powerhop8000/front-8000-png.png";
+import productspread from "../assets/productspread.png";
+import hero from "../assets/testimonials/ChatGPT_Image_Apr_27_2026_08_51_14_AM.webp";
+---
+
+<Layout Page="OurServices" Title="Our Services">
+  <section class="services-page">
+    <h1 class="services-title">
+      Power/Hop series<span class="text-brand">:</span>
+    </h1>
+
+    <!-- PREVIOUS DESIGN FALLBACK SAFE: -->
+    <!-- <div class="services-hero">
+      <Image
+        id="heroImg"
+        src={hero}
+        alt="Power/Hop unit in use"
+        class="productspread"
+      /> -->
+
+    <!-- <ProductComparisonTable /> -->
+
+    <!-- <div
+        class="pt-0 place-self-end lg:col-start-2 flex flex-col items-end pr-4"
+      >
+        <p
+          class="pb-4 font-sans capitalize text-right text-brand text-lg tracking-widest"
+        >
+          ₦0 STARTUP COST
+        </p>
+        <Button
+          href="/booking/"
+          variant={3}
+          text="GET STARTED →"
+          class="sticky-get-started"
+        />
+      </div> -->
+    <!-- </div> -->
+
+    <div class="md:grid md:grid-cols-2 md:gap-12">
+      <Image
+        id="heroImg"
+        src={hero}
+        alt="Power/Hop unit in use"
+        class="productspread"
+      />
+
+      <div class="mt-6 md:mt-0 flex flex-col justify-between">
+        <div>
+          <h2 class="font-display text-light-primary text-4xl font-black">
+            No hidden fees, <span class="text-brand"
+              >an all in one solution.</span
+            >
+          </h2>
+          <p class="font-sans text-light-secondary text-md pt-4 pb-6">
+            No matter which Power/Hop product you choose, the startup fee will
+            always be <span class="text-brand font-semibold">₦0</span>. And if
+            you unit stops working, we will replace or repair it in less than 48
+            hours at no additional costs. <br /><br /> All units are equipped to charge
+            automatically, so all you have to worry about is the stuff that matters
+            to you. <br /><br /> You can also pause your subscription at any time
+            for no additional fee, so you can rest assured that you won't be paying
+            for something you aren't using.
+          </p>
+        </div>
+        <div>
+          <Button
+            href="/booking/"
+            variant={3}
+            text="GET STARTED →"
+            class="sticky-get-started"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="productcardlist">
+      <ProductCard
+        name="Power/Hop1000"
+        description="For the small household or business, the Power/Hop1000 provides up to 1,000 Wh of stored power, enough to keep your fridge, TV and a few lights or chargers running for hours."
+        image={powerhop1000}
+        link="/powerhop1000/"
+      />
+      <ProductCard
+        name="Power/Hop2000"
+        description="For the medium household or business, the Power/Hop2000 provides up to 2,000 Wh of stored power, enough to keep your fridge, TV, washing machine and a few lights or chargers running for hours."
+        image={powerhop2000}
+        link="/powerhop2000/"
+      />
+      <ProductCard
+        name="Power/Hop8000"
+        description="For the large household or business, the Power/Hop8000 provides up to 8,000 Wh of stored power, enough to keep plenty of appliances running for hours, including your fridge, TV, washing machine, lights and even your AC unit."
+        image={powerhop8000}
+        link="/powerhop8000/"
+      />
+    </div>
+
+    <div class="mt-12">
+      <ProductComparisonTable3Column />
+    </div>
+
+    <section class="service-help" aria-labelledby="service-help-title">
+      <h2 id="service-help-title">
+        Need a hand<span class="text-brand">?</span>
+      </h2>
+      <p>
+        We might have the answer to your question in our <a
+          href="/faq/"
+          class="text-brand underline">FAQ</a
+        > — but if you can't find what you're looking for, don't hesitate to reach
+        out to our support team. We're here to help you get the most out of your Power/Hop
+        experience.
+      </p>
+      <Button
+        href="/faq/"
+        variant={3}
+        text="Help"
+        class="service-help-button"
+      />
+    </section>
+  </section>
+</Layout>
+
+<style>
+  .services-page {
+    box-sizing: border-box;
+    width: min(100%, 64rem);
+    margin: 0 auto;
+    padding: 0 1.25rem;
+  }
+
+  .services-title {
+    margin: 0 0 2rem;
+    color: #111111;
+    font-family: "Barlow Condensed", Arial, Helvetica, sans-serif;
+    font-size: clamp(2.5rem, 8vw, 4rem);
+    font-weight: 900;
+    line-height: 0.95;
+    text-transform: uppercase;
+  }
+
+  .services-hero {
+    display: grid;
+    gap: 2rem;
+    align-items: stretch;
+  }
+
+  .productspread {
+    display: block;
+    width: 100%;
+    max-width: 34rem;
+    height: auto;
+    margin: 0 auto;
+    object-fit: contain;
+  }
+
+  .productcardlist {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    width: 100%;
+    gap: 2rem;
+    justify-items: center;
+    margin-top: 4rem;
+  }
+
+  .service-help {
+    width: min(100%, 30rem);
+    margin: 4rem auto 0;
+  }
+
+  .service-help h2 {
+    margin: 0 0 1rem;
+    color: #111111;
+    font-family: "Barlow Condensed", Arial, Helvetica, sans-serif;
+    font-size: 2.5rem;
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  .service-help p {
+    margin: 0 0 1.25rem;
+    color: #737373;
+    font-family: Inter, Arial, Helvetica, sans-serif;
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+
+  :global(.service-help-button) {
+    width: min(100%, 13rem);
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  #heroImg {
+    object-fit: cover;
+  }
+
+  @media (max-width: 63.9375rem) {
+    .services-page {
+      width: 100%;
+      padding-right: 1.25rem;
+      padding-left: 1.25rem;
+    }
+
+    .services-hero {
+      justify-items: center;
+    }
+
+    .services-title {
+      font-size: 2rem;
+    }
+
+    :global(.services-page .comparisontable) {
+      width: 100%;
+    }
+
+    :global(.services-page .productcard) {
+      width: 100%;
+      max-width: 22.5rem;
+    }
+
+    :global(.services-page .comparisontable > *) {
+      min-height: 3.35rem;
+      padding: 0.6rem 0.9rem;
+    }
+
+    :global(.services-page .comparisontable p),
+    :global(.services-page .productdescription),
+    .service-help p {
+      font-size: 12px;
+    }
+
+    :global(.services-page .productname:nth-child(1)::before),
+    :global(.services-page .productname:nth-child(1)::after),
+    :global(.services-page .productname:nth-child(2)::before),
+    :global(.services-page .productname:nth-child(2)::after) {
+      font-size: 16px;
+    }
+
+    :global(.services-page .productcard .productname),
+    .service-help h2 {
+      font-size: 1.5rem;
+    }
+
+    :global(.services-page .productbutton),
+    :global(.service-help-button) {
+      font-size: 0.75rem;
+    }
+
+    #heroImg {
+      max-height: 400px;
+    }
+  }
+
+  @media (min-width: 42rem) {
+    .productcardlist {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: start;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .services-page {
+      padding: 0;
+    }
+
+    .services-title {
+      margin-bottom: 3.75rem;
+      font-size: 3.6rem;
+    }
+
+    .services-hero {
+      grid-template-columns: minmax(0, 1.35fr) minmax(20rem, 0.95fr);
+      gap: 2rem;
+      align-items: start;
+    }
+
+    .productspread {
+      aspect-ratio: 1.35 / 1;
+      height: 100%;
+      /* max-height: 26.5rem; */
+      max-width: 34rem;
+    }
+
+    :global(.services-hero .comparisontable) {
+      width: 100%;
+    }
+
+    :global(.services-hero .comparisontable > *) {
+      min-height: 3.35rem;
+      padding: 0.45rem 0.65rem;
+    }
+
+    :global(.services-hero .comparisontable p) {
+      font-size: 0.72rem;
+    }
+
+    .productcardlist {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 5.5rem;
+      justify-items: stretch;
+      margin-top: 4rem;
+    }
+
+    :global(.productcardlist .productcard) {
+      width: 100%;
+      max-width: 18rem;
+    }
+
+    :global(.productcardlist .productimageframe) {
+      aspect-ratio: 1 / 1.06;
+    }
+
+    :global(.productcardlist .productname) {
+      margin-top: 1.2rem;
+      font-size: 0.95rem;
+      letter-spacing: 0.28em;
+    }
+
+    :global(.productcardlist .productdescription) {
+      font-size: 0.78rem;
+      line-height: 1.8;
+    }
+
+    :global(.productcardlist .productbutton) {
+      min-width: 13rem;
+      margin-top: 1.25rem;
+      padding: 0.6rem 1rem;
+      font-size: 0.85rem;
+    }
+
+    .service-help {
+      margin-top: 4.25rem;
+      text-align: left;
+    }
+  }
+</style>
