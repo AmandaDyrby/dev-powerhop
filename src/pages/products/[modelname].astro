@@ -1,135 +1,242 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import ProductCarousel from "../components/ProductCarousel.astro";
-import Button from "../components/Button.astro";
-import frontImage from "../assets/powerhop1000/front-1000-png.png";
-import faceImage from "../assets/powerhop1000/face-1000-png.png";
-import backImage from "../assets/powerhop1000/back-1000-png.png";
+import Layout from "../../layouts/Layout.astro";
+import ProductCarousel from "../../components/ProductCarousel.astro";
+import Button from "../../components/Button.astro";
+
+type Product = {
+  id: number;
+  modelname: string;
+  active: boolean;
+  usablepower: number | null;
+  surgeprotection: number | null;
+  chargingtime: number | null;
+  acinputmin: number | null;
+  acinputmax: number | null;
+  battery: string | null;
+  lifespan: number | null;
+  inverter: number | null;
+  extratraits: string | null;
+  price: number | null;
+  productdescription: string | null;
+  productblurb: string | null;
+  specs: string | null;
+  "feature-lights": boolean | null;
+  "feature-fan": boolean | null;
+  "feature-wifi": boolean | null;
+  "feature-laptop": boolean | null;
+  "feature-tv": boolean | null;
+  "feature-phone": boolean | null;
+  "feature-sewing": boolean | null;
+  "feature-pos": boolean | null;
+  "feature-drill": boolean | null;
+  "feature-fridge": boolean | null;
+  "feature-aircon": boolean | null;
+  "feature-freezer": boolean | null;
+  "feature-speaker": boolean | null;
+  "feature-printer": boolean | null;
+  "feature-computer": boolean | null;
+  imgfront: string | null;
+  imgface: string | null;
+  imgback: string | null;
+};
+
+const { product } = Astro.props as { product: Product };
+
+const formatNumber = (value: number | null) =>
+  value === null ? null : new Intl.NumberFormat("en-US").format(value);
+
+const formatModelName = (modelname: string) => {
+  const match = modelname.match(/^powerhop(.+)$/i);
+
+  return match
+    ? { prefix: "POWER/HOP", number: match[1] }
+    : { prefix: modelname, number: "" };
+};
+
+const modelName = formatModelName(product.modelname);
 
 const carouselImages = [
   {
-    src: frontImage,
-    alt: "Front view of Power/Hop1000",
+    src: product.imgfront,
+    alt: `Front view of ${modelName.prefix}${modelName.number}`,
   },
   {
-    src: faceImage,
-    alt: "Face view of Power/Hop1000",
+    src: product.imgface,
+    alt: `Face view of ${modelName.prefix}${modelName.number}`,
   },
   {
-    src: backImage,
-    alt: "Back view of Power/Hop1000",
+    src: product.imgback,
+    alt: `Back view of ${modelName.prefix}${modelName.number}`,
   },
-];
+].filter(
+  (image): image is { src: string; alt: string } =>
+    typeof image.src === "string" && image.src.trim().length > 0,
+);
+
+const productStats = [
+  [
+    "USABLE POWER",
+    product.usablepower === null
+      ? null
+      : `${formatNumber(product.usablepower)} WH`,
+  ],
+  [
+    "SURGE PROTECT.",
+    product.surgeprotection === null
+      ? null
+      : `${formatNumber(product.surgeprotection)} W`,
+  ],
+  [
+    "CHARGING TIME",
+    product.chargingtime === null ? null : `~${product.chargingtime}H`,
+  ],
+  [
+    "AC INPUT",
+    product.acinputmin === null || product.acinputmax === null
+      ? null
+      : `${product.acinputmin}-${product.acinputmax} V`,
+  ],
+  ["BATTERY", product.battery],
+  [
+    "LIFESPAN",
+    product.lifespan === null
+      ? null
+      : `${formatNumber(product.lifespan)}+ CYCLES`,
+  ],
+  [
+    "INVERTER",
+    product.inverter === null ? null : `${formatNumber(product.inverter)} W`,
+  ],
+].filter((stat): stat is [string, string] => Boolean(stat[1]));
+
+const extraTraits =
+  product.extratraits
+    ?.split(",")
+    .map((trait) => trait.trim())
+    .filter(Boolean) ?? [];
+
+const productFeatures = [
+  ["feature-lights", "Lights"],
+  ["feature-fan", "Fan"],
+  ["feature-wifi", "Wi-Fi"],
+  ["feature-laptop", "Laptop"],
+  ["feature-tv", "TV"],
+  ["feature-phone", "Phone"],
+  ["feature-sewing", "Sewing"],
+  ["feature-pos", "POS"],
+  ["feature-drill", "Drill"],
+  ["feature-fridge", "Fridge"],
+  ["feature-aircon", "Aircon"],
+  ["feature-freezer", "Freezer"],
+  ["feature-speaker", "Speaker"],
+  ["feature-printer", "Printer"],
+  ["feature-computer", "Computer"],
+].filter(([featureKey]) => product[featureKey as keyof Product]);
+
+const formattedPrice =
+  product.price === null ? null : `\u20a6${formatNumber(product.price)}`;
+
+export async function getStaticPaths() {
+  const response = await fetch(
+    `${import.meta.env.SUPABASE_URL}/rest/v1/products?select=*&active=eq.true`,
+    {
+      headers: {
+        apikey: import.meta.env.SUPABASE_PUBLISHABLE_KEY,
+      },
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch products: ${response.status}`);
+  }
+
+  const products = (await response.json()) as Product[];
+
+  return products.map((product) => {
+    return {
+      params: { modelname: String(product.modelname) },
+      props: { product },
+    };
+  });
+}
 ---
 
-<Layout Page="Product Page" Title="Product Page">
+<Layout Page={product.modelname} Title={product.modelname}>
   <section class="product-page">
     <ProductCarousel images={carouselImages} />
 
     <div class="product-details">
-      <h1>Power/Hop<span>1000</span></h1>
+      <h1>{modelName.prefix}<span>{modelName.number}</span></h1>
 
       <div class="productstatistics">
-        <p>USABLE POWER</p>
-        <p>1,000 WH</p>
-        <p>SURGE PROTECT.</p>
-        <p>1,000 W</p>
-        <p>CHARGING TIME</p>
-        <p>~4H</p>
-        <p>AC INPUT</p>
-        <p>90-260 V</p>
-        <p>BATTERY</p>
-        <p>LIFEPO₄</p>
-        <p>LIFESPAN</p>
-        <p>3,000+ CYCLES</p>
-        <p>INVERTER</p>
-        <p>500 W</p>
-        <div class="extrafeatures">
-          <p>MOBILE APPLICATION</p>
-          <p>WEB PORTAL</p>
-          <p>IOT TELEMETRY</p>
-        </div>
+        {
+          productStats.map(([label, value]) => (
+            <>
+              <p>{label}</p>
+              <p>{value}</p>
+            </>
+          ))
+        }
+        {
+          extraTraits.length > 0 && (
+            <div class="extrafeatures">
+              {extraTraits.map((trait) => (
+                <p>{trait}</p>
+              ))}
+            </div>
+          )
+        }
       </div>
 
-      <div class="productprice">
-        <p class="price">₦24,000</p>
-        <p class="billing-period">/ MONTH</p>
-        <p class="startup-cost">₦0 STARTUP COST</p>
-      </div>
+      {
+        formattedPrice && (
+          <div class="productprice">
+            <p class="price">{formattedPrice}</p>
+            <p class="billing-period">/ MONTH</p>
+            <p class="startup-cost">&#8358;0 STARTUP COST</p>
+          </div>
+        )
+      }
     </div>
 
-    <p class="product-description">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi eleifend
-      orci nec nunc sollicitudin venenatis. Vestibulum suscipit in quam eu
-      eleifend. Suspendisse ac elit nunc. Maecenas ut urna facilisis,
-      consectetur nisi eu, molestie mi. Nunc non ligula auctor dui placerat
-      pharetra. Fusce eget ante convallis, congue est placerat, bibendum justo.
-    </p>
+    {
+      product.productdescription && (
+        <p class="product-description">{product.productdescription}</p>
+      )
+    }
 
     <Button
       href="/booking/"
       variant={3}
-      text="GET STARTED →"
+      text="GET STARTED ->"
       class="sticky-get-started"
     />
 
     <section class="power-features">
       <h2>What can I power</h2>
-      <p>
-        The PowerHop 1000 is capable of powering many devices, and stores 1000W
-        of usable power. When the power grid returns, it recharges automatically
-        in about 4 hours, ensuring frequent uptime.
-      </p>
+      {product.productblurb && <p>{product.productblurb}</p>}
 
       <div class="feature-elements">
-        <div class="feature">
-          <span class="feature-icon" aria-hidden="true"></span>
-          <h3>Lights</h3>
-        </div>
-        <div class="feature">
-          <span class="feature-icon" aria-hidden="true"></span>
-          <h3>Fan</h3>
-        </div>
-        <div class="feature">
-          <span class="feature-icon" aria-hidden="true"></span>
-          <h3>Wi-Fi</h3>
-        </div>
-        <div class="feature">
-          <span class="feature-icon" aria-hidden="true"></span>
-          <h3>Laptop</h3>
-        </div>
-        <div class="feature">
-          <span class="feature-icon" aria-hidden="true"></span>
-          <h3>TV</h3>
-        </div>
-        <div class="feature">
-          <span class="feature-icon" aria-hidden="true"></span>
-          <h3>Phone</h3>
-        </div>
-        <div class="feature">
-          <span class="feature-icon" aria-hidden="true"></span>
-          <h3>Sewing</h3>
-        </div>
-        <div class="feature">
-          <span class="feature-icon" aria-hidden="true"></span>
-          <h3>POS</h3>
-        </div>
-        <div class="feature">
-          <span class="feature-icon" aria-hidden="true"></span>
-          <h3>Drill</h3>
-        </div>
+        {
+          productFeatures.map(([, label]) => (
+            <div class="feature">
+              <span class="feature-icon" aria-hidden="true" />
+              <h3>{label}</h3>
+            </div>
+          ))
+        }
       </div>
       <p class="feature-more">...and much more.</p>
     </section>
 
-    <details class="specsdropdown">
-      <summary>SPECIFICATIONS</summary>
-      <p>
-        Perhaps the PowerHop 2000 is a better fit for your needs, with up to
-        2,000 Wh of usable power stored between each charging, starting at
-        ₦36,000 / month.
-      </p>
-    </details>
+    {
+      product.specs && (
+        <details class="specsdropdown">
+          <summary>SPECIFICATIONS</summary>
+          <p>{product.specs}</p>
+        </details>
+      )
+    }
 
     <section class="need-more">
       <h2>Need more</h2>
@@ -138,7 +245,7 @@ const carouselImages = [
         power needs.
       </p>
 
-      <Button href="/services/" variant={1} text="MODELS →" />
+      <Button href="/services/" variant={1} text="MODELS ->" />
     </section>
   </section>
 </Layout>

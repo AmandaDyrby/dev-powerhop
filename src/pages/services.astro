@@ -6,11 +6,52 @@ import ProductComparisonTable from "../components/ProductComparisonTable.astro";
 import ProductComparisonTable3Column from "../components/ProductComparisonTable3Column.astro";
 import ProductCard from "../components/ProductCard.astro";
 import "../styles/global.css";
-import powerhop1000 from "../assets/powerhop1000/front-1000-png.png";
-import powerhop2000 from "../assets/powerhop2000/front-2000-png.png";
-import powerhop8000 from "../assets/powerhop8000/front-8000-png.png";
 import productspread from "../assets/productspread.png";
-import hero from "../assets/testimonials/ChatGPT_Image_Apr_27_2026_08_51_14_AM.webp";
+
+type Product = {
+  id: number;
+  modelname: string;
+  active: boolean;
+  price: number | null;
+  productblurb: string | null;
+  imgfront: string | null;
+};
+
+const response = await fetch(
+  `${import.meta.env.SUPABASE_URL}/rest/v1/products?select=id,modelname,active,price,productblurb,imgfront&active=eq.true&order=id.asc`,
+  {
+    headers: {
+      apikey: import.meta.env.SUPABASE_PUBLISHABLE_KEY,
+      Authorization: `Bearer ${import.meta.env.SUPABASE_PUBLISHABLE_KEY}`,
+    },
+  },
+);
+
+if (!response.ok) {
+  throw new Error(`Failed to fetch products: ${response.status}`);
+}
+
+const products = (await response.json()) as Product[];
+
+const formatNumber = (value: number | null) =>
+  value === null ? null : new Intl.NumberFormat("en-US").format(value);
+
+const formatPrice = (price: number | null) => {
+  const formattedPrice = formatNumber(price);
+
+  return formattedPrice ? `\u20a6${formattedPrice}` : "";
+};
+
+const formatModelName = (modelname: string) => {
+  const match = modelname.match(/^powerhop(.+)$/i);
+
+  return match ? `Power/Hop${match[1]}` : modelname;
+};
+
+const productCards = products.filter(
+  (product): product is Product & { imgfront: string } =>
+    typeof product.imgfront === "string" && product.imgfront.trim().length > 0,
+);
 ---
 
 <Layout Page="OurServices" Title="Our Services">
@@ -28,106 +69,58 @@ import hero from "../assets/testimonials/ChatGPT_Image_Apr_27_2026_08_51_14_AM.w
         class="productspread"
       /> -->
 
-    <!-- <ProductComparisonTable /> -->
+    <ProductComparisonTable />
+  </section>
 
-    <!-- <div
-        class="pt-0 place-self-end lg:col-start-2 flex flex-col items-end pr-4"
-      >
-        <p
-          class="pb-4 font-sans capitalize text-right text-brand text-lg tracking-widest"
-        >
-          ₦0 STARTUP COST
-        </p>
-        <Button
-          href="/booking/"
-          variant={3}
-          text="GET STARTED →"
-          class="sticky-get-started"
+  <div class="bg-light-bg p-6 border border-light-muted mt-12">
+    <h2 class="font-display text-light-primary text-4xl font-black">
+      No hidden fees, <span class="text-brand">an all in one solution</span>
+    </h2>
+    <p class="font-sans text-light-secondary text-md py-4">
+      No matter which Power/Hop product you choose, the startup fee will always
+      be <span class="text-brand">₦0</span>. And if you unit stops working, we
+      will replace or repair it in less than 48 hours at no additional costs. <br
+      /> All units are equipped to charge automatically, so all you have to worry
+      about is the stuff that matters to you. <br /> You can also pause your subscription
+      at any time for no additional fee, so you can rest assured that you won't be
+      paying for something you aren't using.
+    </p>
+    <Button
+      href="/booking/"
+      variant={3}
+      text="GET STARTED →"
+      class="sticky-get-started"
+    />
+  </div>
+
+  <div class="productcardlist">
+    {
+      productCards.map((product) => (
+        <ProductCard
+          name={formatModelName(product.modelname)}
+          description={product.productblurb ?? ""}
+          image={product.imgfront}
+          price={formatPrice(product.price)}
+          link={`/products/${product.modelname}/`}
+          alt={`Front view of ${formatModelName(product.modelname)}`}
         />
-      </div> -->
-    <!-- </div> -->
+      ))
+    }
+  </div>
 
-    <div class="md:grid md:grid-cols-2 md:gap-12">
-      <Image
-        id="heroImg"
-        src={hero}
-        alt="Power/Hop unit in use"
-        class="productspread"
-      />
-
-      <div class="mt-6 md:mt-0 flex flex-col justify-between">
-        <div>
-          <h2 class="font-display text-light-primary text-4xl font-black">
-            No hidden fees, <span class="text-brand"
-              >an all in one solution.</span
-            >
-          </h2>
-          <p class="font-sans text-light-secondary text-md pt-4 pb-6">
-            No matter which Power/Hop product you choose, the startup fee will
-            always be <span class="text-brand font-semibold">₦0</span>. And if
-            you unit stops working, we will replace or repair it in less than 48
-            hours at no additional costs. <br /><br /> All units are equipped to charge
-            automatically, so all you have to worry about is the stuff that matters
-            to you. <br /><br /> You can also pause your subscription at any time
-            for no additional fee, so you can rest assured that you won't be paying
-            for something you aren't using.
-          </p>
-        </div>
-        <div>
-          <Button
-            href="/booking/"
-            variant={3}
-            text="GET STARTED →"
-            class="sticky-get-started"
-          />
-        </div>
-      </div>
-    </div>
-
-    <div class="productcardlist">
-      <ProductCard
-        name="Power/Hop1000"
-        description="For the small household or business, the Power/Hop1000 provides up to 1,000 Wh of stored power, enough to keep your fridge, TV and a few lights or chargers running for hours."
-        image={powerhop1000}
-        link="/powerhop1000/"
-      />
-      <ProductCard
-        name="Power/Hop2000"
-        description="For the medium household or business, the Power/Hop2000 provides up to 2,000 Wh of stored power, enough to keep your fridge, TV, washing machine and a few lights or chargers running for hours."
-        image={powerhop2000}
-        link="/powerhop2000/"
-      />
-      <ProductCard
-        name="Power/Hop8000"
-        description="For the large household or business, the Power/Hop8000 provides up to 8,000 Wh of stored power, enough to keep plenty of appliances running for hours, including your fridge, TV, washing machine, lights and even your AC unit."
-        image={powerhop8000}
-        link="/powerhop8000/"
-      />
-    </div>
-
-    <div class="mt-12">
-      <ProductComparisonTable3Column />
-    </div>
-
-    <section class="service-help" aria-labelledby="service-help-title">
-      <h2 id="service-help-title">
-        Need a hand<span class="text-brand">?</span>
-      </h2>
-      <p>
-        We might have the answer to your question in our <a
-          href="/faq/"
-          class="text-brand underline">FAQ</a
-        > — but if you can't find what you're looking for, don't hesitate to reach
-        out to our support team. We're here to help you get the most out of your Power/Hop
-        experience.
-      </p>
-      <Button
+  <section class="service-help" aria-labelledby="service-help-title">
+    <h2 id="service-help-title">
+      Need a hand<span class="text-brand">?</span>
+    </h2>
+    <p>
+      We might have the answer to your question in our <a
         href="/faq/"
-        variant={3}
-        text="Help"
-        class="service-help-button"
-      />
-    </section>
+        class="text-brand underline">FAQ</a
+      > — but if you can't find what you're looking for, don't hesitate to reach out
+      to our support team. We're here to help you get the most out of your Power/Hop
+      experience.
+    </p>
+    <Button href="/faq/" variant={3} text="Help" class="service-help-button" />
   </section>
 </Layout>
 
