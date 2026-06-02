@@ -1,0 +1,142 @@
+---
+const Page = Astro.props.Page;
+import infoIcon from "../assets/infoIcon.svg";
+import MoreInfo from "./MoreInfo.astro";
+---
+
+<div
+  class="grid grid-cols-2 md:grid-cols-3 bg-light-bg border border-light-muted [&>*]:border-light-muted [&>*]:border-r [&>*:nth-child(3n-1)]:border-r-0 md:[&>*:nth-child(3n-1)]:border-r md:[&>*:nth-child(3n)]:border-r-0 [&>*]:border-b [&>*:nth-last-child(-n+3)]:border-b-0 [&>*]:p-4 [&>*]:flex [&>*]:flex-col [&>*]:justify-end md:[&>.ph8000]:!flex"
+>
+  <!-- Product headers for the two models being compared. -->
+  <h3 class="font-display text-3xl font-black text-light-primary">
+    <span>
+      POWER/HOP<span class="text-brand">1000</span>
+    </span>
+  </h3>
+  <h3 class="font-display text-3xl font-black text-light-primary">
+    <span>
+      POWER/HOP<span class="text-brand">2000</span>
+    </span>
+  </h3>
+  <h3 class="font-display text-3xl font-black text-light-primary ph8000">
+    <span>
+      POWER/HOP<span class="text-brand">8000</span>
+    </span>
+  </h3>
+
+  <!-- Each spec row uses a labelled left cell and a matching value on the right. -->
+  <div>
+    <div class="flex flex-row gap-x-2">
+      <p class="font-mono text-light-muted text-lg font-medium">USABLE POWER</p>
+      <MoreInfo
+        content="Usable power determines how long a battery will last - the higher the WH, the longer the battery will last."
+      />
+    </div>
+    <p class="font-mono text-light-primary text-lg font-medium">1000 WH</p>
+  </div>
+  <p class="font-mono text-light-primary text-lg font-medium">2000 WH</p>
+  <p class="ph8000 font-mono text-light-primary text-lg font-medium">8000 WH</p>
+  <div>
+    <div class="flex flex-row gap-x-2">
+      <p class="font-mono text-light-muted text-lg font-medium">
+        SURGE PROTECTION
+      </p>
+      <MoreInfo
+        content="Surge protection is a feature that protects your devices from power surges. A surge is a sudden increase in voltage that can damage your devices. The higher the surge protection, the better protected your devices will be."
+      />
+    </div>
+    <p class="font-mono text-light-primary text-lg font-medium">1000 WH</p>
+  </div>
+  <p class="font-mono text-light-primary text-lg font-medium">2000 WH</p>
+  <p class="ph8000 font-mono text-light-primary text-lg font-medium">8000 WH</p>
+  <div>
+    <div class="flex flex-row gap-x-2">
+      <p class="font-mono text-light-muted text-lg font-medium">INVERTER</p>
+      <MoreInfo
+        content="An inverter converts DC power from the battery into AC power for use with household appliances."
+      />
+    </div>
+    <p class="font-mono text-light-primary text-lg font-medium">500 WH</p>
+  </div>
+  <p class="font-mono text-light-primary text-lg font-medium">1000 WH</p>
+  <p class="ph8000 font-mono text-light-primary text-lg font-medium">4000 WH</p>
+  <div>
+    <div class="flex flex-row gap-x-2">
+      <p class="font-mono text-light-muted text-lg font-medium">
+        CHARGING TIME
+      </p>
+      <MoreInfo
+        content="Charging time refers to the duration it takes to fully charge the battery."
+      />
+    </div>
+    <p class="font-mono text-light-primary text-lg font-medium">~4H</p>
+  </div>
+  <p class="font-mono text-light-primary text-lg font-medium">~4H</p>
+  <p class="ph8000 font-mono text-light-primary text-lg font-medium">~4H</p>
+  <div>
+    <div class="flex flex-row gap-x-2">
+      <p class="font-mono text-light-muted text-lg font-medium">AC INPUT</p>
+      <MoreInfo
+        content="AC input refers to the alternating current voltage that the power station can accept from the grid."
+      />
+    </div>
+    <p class="font-mono text-light-primary text-lg font-medium">90-260 V</p>
+  </div>
+  <p class="font-mono text-light-primary text-lg font-medium">90-260 V</p>
+  <p class="ph8000 font-mono text-light-primary text-lg font-medium">
+    90-350 V
+  </p>
+  <div>
+    <div class="flex flex-row gap-x-2">
+      <p class="font-mono text-light-muted text-lg font-medium">BATTERY</p>
+      <MoreInfo
+        content="The battery is the component that stores energy for later use."
+      />
+    </div>
+    <p class="font-mono text-light-primary text-lg font-medium">LIFEPO₄</p>
+  </div>
+  <p class="font-mono text-light-primary text-lg font-medium">LIFEPO₄</p>
+  <p class="ph8000 font-mono text-light-primary text-lg font-medium">LIFEPO₄</p>
+  <div>
+    <div class="flex flex-row gap-x-2">
+      <p class="font-mono text-light-muted text-lg font-medium">LIFESPAN</p>
+      <MoreInfo
+        content="The lifespan of a battery refers to the number of charge and discharge cycles it can undergo before its capacity drops below a certain threshold."
+      />
+    </div>
+    <p class="font-mono text-light-primary text-lg font-medium">3000+ CYCLES</p>
+  </div>
+  <p class="font-mono text-light-primary text-lg font-medium">3000+ CYCLES</p>
+  <p class="ph8000 font-mono text-light-primary text-lg font-medium">
+    3000+ CYCLES
+  </p>
+  <div>
+    <p class="font-mono text-light-muted text-lg font-medium">PRICE</p>
+    <p
+      class="font-mono text-light-primary text-lg font-medium whitespace-nowrap"
+    >
+      <span class="font-sans">₦</span>24,000 / month
+    </p>
+  </div>
+  <p class="font-mono text-light-primary text-lg font-medium">
+    <span><span class="font-sans">₦</span>36,000 / month</span>
+  </p>
+  <p class="ph8000 font-mono text-light-primary text-lg font-medium">
+    <span>
+      <span class="font-sans">₦</span>90,000 / month
+    </span>
+  </p>
+</div>
+
+<style>
+  /* hides the third column on smaller screens */
+  .ph8000 {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    .ph8000 {
+      display: block;
+    }
+  }
+</style>

@@ -3,12 +3,14 @@ import Layout from "../layouts/Layout.astro";
 import { Image } from "astro:assets";
 import Button from "../components/Button.astro";
 import ProductComparisonTable from "../components/ProductComparisonTable.astro";
+import ProductComparisonTable3Column from "../components/ProductComparisonTable3Column.astro";
 import ProductCard from "../components/ProductCard.astro";
 import "../styles/global.css";
 import powerhop1000 from "../assets/powerhop1000/front-1000-png.png";
 import powerhop2000 from "../assets/powerhop2000/front-2000-png.png";
 import powerhop8000 from "../assets/powerhop8000/front-8000-png.png";
 import productspread from "../assets/productspread.png";
+import hero from "../assets/testimonials/ChatGPT_Image_Apr_27_2026_08_51_14_AM.webp";
 ---
 
 <Layout Page="OurServices" Title="Our Services">
@@ -17,16 +19,18 @@ import productspread from "../assets/productspread.png";
       Power/Hop series<span class="text-brand">:</span>
     </h1>
 
-    <div class="services-hero">
+    <!-- PREVIOUS DESIGN FALLBACK SAFE: -->
+    <!-- <div class="services-hero">
       <Image
-        src={productspread}
-        alt="PowerHop product spread"
+        id="heroImg"
+        src={hero}
+        alt="Power/Hop unit in use"
         class="productspread"
-      />
+      /> -->
 
-      <ProductComparisonTable />
+    <!-- <ProductComparisonTable /> -->
 
-      <!-- <div
+    <!-- <div
         class="pt-0 place-self-end lg:col-start-2 flex flex-col items-end pr-4"
       >
         <p
@@ -41,27 +45,45 @@ import productspread from "../assets/productspread.png";
           class="sticky-get-started"
         />
       </div> -->
-    </div>
+    <!-- </div> -->
 
-    <div class="bg-light-bg p-6 border border-light-muted mt-12">
-      <h2 class="font-display text-light-primary text-4xl font-black">
-        No hidden fees, <span class="text-brand">an all in one solution</span>
-      </h2>
-      <p class="font-sans text-light-secondary text-md py-4">
-        No matter which Power/Hop product you choose, the startup fee will
-        always be <span class="text-brand">₦0</span>. And if you unit stops
-        working, we will replace or repair it in less than 48 hours at no
-        additional costs. <br /> All units are equipped to charge automatically, so
-        all you have to worry about is the stuff that matters to you. <br /> You can
-        also pause your subscription at any time for no additional fee, so you can
-        rest assured that you won't be paying for something you aren't using.
-      </p>
-      <Button
-        href="/booking/"
-        variant={3}
-        text="GET STARTED →"
-        class="sticky-get-started"
+    <div class="md:grid md:grid-cols-2 md:gap-6">
+      <Image
+        id="heroImg"
+        src={hero}
+        alt="Power/Hop unit in use"
+        class="productspread"
       />
+
+      <div
+        class="mt-6 md:mt-0 bg-light-bg p-6 border border-light-muted flex flex-col justify-between"
+      >
+        <div>
+          <h2 class="font-display text-light-primary text-4xl font-black">
+            No hidden fees, <span class="text-brand"
+              >an all in one solution</span
+            >
+          </h2>
+          <p class="font-sans text-light-secondary text-md pt-4 pb-6">
+            No matter which Power/Hop product you choose, the startup fee will
+            always be <span class="text-brand">₦0</span>. And if you unit stops
+            working, we will replace or repair it in less than 48 hours at no
+            additional costs. <br /><br /> All units are equipped to charge automatically,
+            so all you have to worry about is the stuff that matters to you. <br
+            /><br /> You can also pause your subscription at any time for no additional
+            fee, so you can rest assured that you won't be paying for something you
+            aren't using.
+          </p>
+        </div>
+        <div>
+          <Button
+            href="/booking/"
+            variant={3}
+            text="GET STARTED →"
+            class="sticky-get-started"
+          />
+        </div>
+      </div>
     </div>
 
     <div class="productcardlist">
@@ -83,6 +105,10 @@ import productspread from "../assets/productspread.png";
         image={powerhop8000}
         link="/powerhop8000/"
       />
+    </div>
+
+    <div class="mt-12">
+      <ProductComparisonTable3Column />
     </div>
 
     <section class="service-help" aria-labelledby="service-help-title">
@@ -177,6 +203,10 @@ import productspread from "../assets/productspread.png";
     margin-left: auto;
   }
 
+  #heroImg {
+    object-fit: cover;
+  }
+
   @media (max-width: 63.9375rem) {
     .services-page {
       width: 100%;
@@ -228,6 +258,10 @@ import productspread from "../assets/productspread.png";
     :global(.service-help-button) {
       font-size: 0.75rem;
     }
+
+    #heroImg {
+      max-height: 400px;
+    }
   }
 
   @media (min-width: 42rem) {
@@ -256,7 +290,7 @@ import productspread from "../assets/productspread.png";
     .productspread {
       aspect-ratio: 1.35 / 1;
       height: 100%;
-      max-height: 26.5rem;
+      /* max-height: 26.5rem; */
       max-width: 34rem;
     }
 
