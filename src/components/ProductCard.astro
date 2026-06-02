@@ -6,23 +6,37 @@ import Button from "./Button.astro";
 interface Props {
   name: string;
   description: string;
-  image: ImageMetadata;
+  image: ImageMetadata | string;
+  price: string;
   link: string;
   alt?: string;
 }
 
-const { name, description, image, link, alt = name } = Astro.props;
+const { name, description, image, price, link, alt = name } = Astro.props;
 ---
 
 <div class="productcard">
   <div class="productimageframe">
-    <Image src={image} alt={alt} class="product-image" width={430} />
+    {
+      typeof image === "string" ? (
+        <Image
+          src={image}
+          alt={alt}
+          class="product-image"
+          width={430}
+          height={452}
+        />
+      ) : (
+        <Image src={image} alt={alt} class="product-image" width={430} />
+      )
+    }
   </div>
 
   <h3 class="productname">{name}</h3>
   <p class="productdescription">
     {description}
   </p>
+  <p class="productprice">{price}</p>
 
   <Button href={link} variant={1} text={name} class="productbutton" />
 </div>

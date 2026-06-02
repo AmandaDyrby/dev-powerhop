@@ -5,10 +5,52 @@ import Button from "../components/Button.astro";
 import ProductComparisonTable from "../components/ProductComparisonTable.astro";
 import ProductCard from "../components/ProductCard.astro";
 import "../styles/global.css";
-import powerhop1000 from "../assets/powerhop1000/front-1000-png.png";
-import powerhop2000 from "../assets/powerhop2000/front-2000-png.png";
-import powerhop8000 from "../assets/powerhop8000/front-8000-png.png";
 import productspread from "../assets/productspread.png";
+
+type Product = {
+  id: number;
+  modelname: string;
+  active: boolean;
+  price: number | null;
+  productblurb: string | null;
+  imgfront: string | null;
+};
+
+const response = await fetch(
+  `${import.meta.env.SUPABASE_URL}/rest/v1/products?select=id,modelname,active,price,productblurb,imgfront&active=eq.true&order=id.asc`,
+  {
+    headers: {
+      apikey: import.meta.env.SUPABASE_PUBLISHABLE_KEY,
+      Authorization: `Bearer ${import.meta.env.SUPABASE_PUBLISHABLE_KEY}`,
+    },
+  },
+);
+
+if (!response.ok) {
+  throw new Error(`Failed to fetch products: ${response.status}`);
+}
+
+const products = (await response.json()) as Product[];
+
+const formatNumber = (value: number | null) =>
+  value === null ? null : new Intl.NumberFormat("en-US").format(value);
+
+const formatPrice = (price: number | null) => {
+  const formattedPrice = formatNumber(price);
+
+  return formattedPrice ? `\u20a6${formattedPrice}` : "";
+};
+
+const formatModelName = (modelname: string) => {
+  const match = modelname.match(/^powerhop(.+)$/i);
+
+  return match ? `Power/Hop${match[1]}` : modelname;
+};
+
+const productCards = products.filter(
+  (product): product is Product & { imgfront: string } =>
+    typeof product.imgfront === "string" && product.imgfront.trim().length > 0,
+);
 ---
 
 <Layout Page="OurServices" Title="Our Services">
@@ -25,22 +67,6 @@ import productspread from "../assets/productspread.png";
       />
 
       <ProductComparisonTable />
-
-      <!-- <div
-        class="pt-0 place-self-end lg:col-start-2 flex flex-col items-end pr-4"
-      >
-        <p
-          class="pb-4 font-sans capitalize text-right text-brand text-lg tracking-widest"
-        >
-          ₦0 STARTUP COST
-        </p>
-        <Button
-          href="/booking/"
-          variant={3}
-          text="GET STARTED →"
-          class="sticky-get-started"
-        />
-      </div> -->
     </div>
 
     <div class="bg-light-bg p-6 border border-light-muted mt-12">
@@ -65,24 +91,18 @@ import productspread from "../assets/productspread.png";
     </div>
 
     <div class="productcardlist">
-      <ProductCard
-        name="Power/Hop1000"
-        description="For the small household or business, the Power/Hop1000 provides up to 1,000 Wh of stored power, enough to keep your fridge, TV and a few lights or chargers running for hours."
-        image={powerhop1000}
-        link="/powerhop1000/"
-      />
-      <ProductCard
-        name="Power/Hop2000"
-        description="For the medium household or business, the Power/Hop2000 provides up to 2,000 Wh of stored power, enough to keep your fridge, TV, washing machine and a few lights or chargers running for hours."
-        image={powerhop2000}
-        link="/powerhop2000/"
-      />
-      <ProductCard
-        name="Power/Hop8000"
-        description="For the large household or business, the Power/Hop8000 provides up to 8,000 Wh of stored power, enough to keep plenty of appliances running for hours, including your fridge, TV, washing machine, lights and even your AC unit."
-        image={powerhop8000}
-        link="/powerhop8000/"
-      />
+      {
+        productCards.map((product) => (
+          <ProductCard
+            name={formatModelName(product.modelname)}
+            description={product.productblurb ?? ""}
+            image={product.imgfront}
+            price={formatPrice(product.price)}
+            link={`/products/${product.modelname}/`}
+            alt={`Front view of ${formatModelName(product.modelname)}`}
+          />
+        ))
+      }
     </div>
 
     <section class="service-help" aria-labelledby="service-help-title">
