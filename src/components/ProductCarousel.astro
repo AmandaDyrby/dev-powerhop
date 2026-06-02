@@ -10,7 +10,7 @@ interface Props {
   images: CarouselImage[];
 }
 
-const { images } = Astro.props;
+const { images = [] } = Astro.props;
 
 const hasMultipleImages = images.length > 1;
 ---
@@ -19,6 +19,7 @@ const hasMultipleImages = images.length > 1;
   class:list={["product-carousel", !hasMultipleImages && "single-image"]}
   aria-label="Product images"
   tabindex="0"
+  data-product-carousel
 >
   {
     hasMultipleImages && (
@@ -90,58 +91,63 @@ const hasMultipleImages = images.length > 1;
 </section>
 
 <script>
-  const carousel = document.querySelector<HTMLElement>(".product-carousel");
-  const images = Array.from(
-    document.querySelectorAll<HTMLElement>("[data-carousel-image]"),
-  );
-  const dots = Array.from(
-    document.querySelectorAll<HTMLButtonElement>("[data-carousel-dot]"),
-  );
-  const previousButton = document.querySelector<HTMLButtonElement>(
-    "[data-carousel-previous]",
-  );
-  const nextButton = document.querySelector<HTMLButtonElement>(
-    "[data-carousel-next]",
-  );
+  document
+    .querySelectorAll<HTMLElement>("[data-product-carousel]")
+    .forEach((carousel) => {
+      const images = Array.from(
+        carousel.querySelectorAll<HTMLElement>("[data-carousel-image]"),
+      );
+      const dots = Array.from(
+        carousel.querySelectorAll<HTMLButtonElement>("[data-carousel-dot]"),
+      );
+      const previousButton = carousel.querySelector<HTMLButtonElement>(
+        "[data-carousel-previous]",
+      );
+      const nextButton = carousel.querySelector<HTMLButtonElement>(
+        "[data-carousel-next]",
+      );
 
-  let activeIndex = 0;
+      let activeIndex = 0;
 
-  const showImage = (nextIndex: number) => {
-    if (images.length === 0) {
-      return;
-    }
+      const showImage = (nextIndex: number) => {
+        if (images.length === 0) {
+          return;
+        }
 
-    activeIndex = (nextIndex + images.length) % images.length;
+        activeIndex = (nextIndex + images.length) % images.length;
 
-    images.forEach((image, index) => {
-      image.classList.toggle("is-active", index === activeIndex);
+        images.forEach((image, index) => {
+          image.classList.toggle("is-active", index === activeIndex);
+        });
+
+        dots.forEach((dot, index) => {
+          const isActive = index === activeIndex;
+          dot.classList.toggle("is-active", isActive);
+          dot.setAttribute("aria-pressed", String(isActive));
+        });
+      };
+
+      previousButton?.addEventListener("click", () =>
+        showImage(activeIndex - 1),
+      );
+      nextButton?.addEventListener("click", () => showImage(activeIndex + 1));
+
+      dots.forEach((dot) => {
+        dot.addEventListener("click", () => {
+          showImage(Number(dot.dataset.carouselIndex || 0));
+        });
+      });
+
+      carousel.addEventListener("keydown", (event) => {
+        if (event.key === "ArrowLeft") {
+          showImage(activeIndex - 1);
+        }
+
+        if (event.key === "ArrowRight") {
+          showImage(activeIndex + 1);
+        }
+      });
     });
-
-    dots.forEach((dot, index) => {
-      const isActive = index === activeIndex;
-      dot.classList.toggle("is-active", isActive);
-      dot.setAttribute("aria-pressed", String(isActive));
-    });
-  };
-
-  previousButton?.addEventListener("click", () => showImage(activeIndex - 1));
-  nextButton?.addEventListener("click", () => showImage(activeIndex + 1));
-
-  dots.forEach((dot) => {
-    dot.addEventListener("click", () => {
-      showImage(Number(dot.dataset.carouselIndex || 0));
-    });
-  });
-
-  carousel?.addEventListener("keydown", (event) => {
-    if (event.key === "ArrowLeft") {
-      showImage(activeIndex - 1);
-    }
-
-    if (event.key === "ArrowRight") {
-      showImage(activeIndex + 1);
-    }
-  });
 </script>
 
 <style>

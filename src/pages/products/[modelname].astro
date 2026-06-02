@@ -53,36 +53,25 @@ const formatModelName = (modelname: string) => {
     : { prefix: modelname, number: "" };
 };
 
-const getProductImageUrl = (src: string | null) => {
-  if (!src) {
-    return null;
-  }
-
-  if (src.startsWith("http")) {
-    return src
-      .replace("/storage/v1/object/sign/", "/storage/v1/object/public/")
-      .split("?")[0];
-  }
-
-  return `${import.meta.env.SUPABASE_URL}/storage/v1/object/public/products/${src.replace(/^\/+/, "")}`;
-};
+const modelName = formatModelName(product.modelname);
 
 const carouselImages = [
   {
-    src: getProductImageUrl(product.imgfront),
-    alt: `Front view of ${product.modelname}`,
+    src: product.imgfront,
+    alt: `Front view of ${modelName.prefix}${modelName.number}`,
   },
   {
-    src: getProductImageUrl(product.imgface),
-    alt: `Face view of ${product.modelname}`,
+    src: product.imgface,
+    alt: `Face view of ${modelName.prefix}${modelName.number}`,
   },
   {
-    src: getProductImageUrl(product.imgback),
-    alt: `Back view of ${product.modelname}`,
+    src: product.imgback,
+    alt: `Back view of ${modelName.prefix}${modelName.number}`,
   },
-].filter((image): image is { src: string; alt: string } => Boolean(image.src));
-
-const modelName = formatModelName(product.modelname);
+].filter(
+  (image): image is { src: string; alt: string } =>
+    typeof image.src === "string" && image.src.trim().length > 0,
+);
 
 const productStats = [
   [
