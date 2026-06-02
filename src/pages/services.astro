@@ -7,6 +7,8 @@ import ProductComparisonTable3Column from "../components/ProductComparisonTable3
 import ProductCard from "../components/ProductCard.astro";
 import "../styles/global.css";
 import productspread from "../assets/productspread.png";
+import { ACTION_QUERY_PARAMS } from "astro:actions";
+import hero from "../assets/testimonials/ChatGPT_Image_Apr_27_2026_08_51_14_AM.webp";
 
 type Product = {
   id: number;
@@ -57,40 +59,44 @@ const productCards = products.filter(
 <Layout Page="OurServices" Title="Our Services">
   <section class="services-page">
     <h1 class="services-title">
-      Power/Hop series<span class="text-brand">:</span>
+      The Power/Hop series<span class="text-brand">:</span>
     </h1>
-
-    <!-- PREVIOUS DESIGN FALLBACK SAFE: -->
-    <!-- <div class="services-hero">
-      <Image
-        id="heroImg"
-        src={hero}
-        alt="Power/Hop unit in use"
-        class="productspread"
-      /> -->
-
-    <ProductComparisonTable />
   </section>
 
-  <div class="bg-light-bg p-6 border border-light-muted mt-12">
-    <h2 class="font-display text-light-primary text-4xl font-black">
-      No hidden fees, <span class="text-brand">an all in one solution</span>
-    </h2>
-    <p class="font-sans text-light-secondary text-md py-4">
-      No matter which Power/Hop product you choose, the startup fee will always
-      be <span class="text-brand">₦0</span>. And if you unit stops working, we
-      will replace or repair it in less than 48 hours at no additional costs. <br
-      /> All units are equipped to charge automatically, so all you have to worry
-      about is the stuff that matters to you. <br /> You can also pause your subscription
-      at any time for no additional fee, so you can rest assured that you won't be
-      paying for something you aren't using.
-    </p>
-    <Button
-      href="/booking/"
-      variant={3}
-      text="GET STARTED →"
-      class="sticky-get-started"
+  <div class="mx-6 md:grid md:grid-cols-2 md:gap-12">
+    <Image
+      id="heroImg"
+      src={hero}
+      alt="Power/Hop unit in use"
+      class="productspread"
     />
+
+    <div class="mt-6 md:mt-0 flex flex-col justify-between">
+      <div>
+        <h2 class="font-display text-light-primary text-4xl font-black">
+          No hidden fees, an <span class="text-brand">all in one solution.</span
+          >
+        </h2>
+        <p class="font-sans text-light-secondary text-md pt-4 pb-6">
+          No matter which Power/Hop product you choose, the startup fee will
+          always be <span class="text-brand font-semibold">₦0</span>. And if you
+          unit stops working, we will replace or repair it in less than 48 hours
+          at no additional costs. <br /><br /> All units are equipped to charge automatically,
+          so all you have to worry about is the stuff that matters to you. <br
+          /><br /> You can also pause your subscription at any time for no additional
+          fee, so you can rest assured that you won't be paying for something you
+          aren't using.
+        </p>
+      </div>
+      <div>
+        <Button
+          href="/booking/"
+          variant={3}
+          text="GET STARTED →"
+          class="sticky-get-started"
+        />
+      </div>
+    </div>
   </div>
 
   <div class="productcardlist">
@@ -107,6 +113,9 @@ const productCards = products.filter(
       ))
     }
   </div>
+  <div class="mt-12 mx-6">
+    <ProductComparisonTable3Column />
+  </div>
 
   <section class="service-help" aria-labelledby="service-help-title">
     <h2 id="service-help-title">
@@ -115,7 +124,7 @@ const productCards = products.filter(
     <p>
       We might have the answer to your question in our <a
         href="/faq/"
-        class="text-brand underline">FAQ</a
+        class="text-brand underline font-semibold">FAQ</a
       > — but if you can't find what you're looking for, don't hesitate to reach out
       to our support team. We're here to help you get the most out of your Power/Hop
       experience.
@@ -167,8 +176,10 @@ const productCards = products.filter(
   }
 
   .service-help {
-    width: min(100%, 30rem);
+    width: min(100%, 52rem);
     margin: 4rem auto 0;
+    padding: 0 1.5rem;
+    padding-bottom: 2rem;
   }
 
   .service-help h2 {
@@ -300,9 +311,10 @@ const productCards = products.filter(
 
     .productcardlist {
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 5.5rem;
-      justify-items: stretch;
+      /* gap: 5.5rem; */
+      /* justify-items: stretch; */
       margin-top: 4rem;
+      padding: 0 1.5rem;
     }
 
     :global(.productcardlist .productcard) {
