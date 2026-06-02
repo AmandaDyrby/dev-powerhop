@@ -2,6 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import Button from "../components/Button.astro";
 import Accordion from "../components/Accordion.astro";
+import AccordionWhatAmIUsedFor from "../components/AccordionWhatAmIUsedFor.astro";
 import Testimonials from "../components/Testimonials.astro";
 import heroImg from "../assets/hero-img.webp";
 import Arrow from "../assets/accordionArrow.svg";
@@ -38,7 +39,7 @@ import { Image } from "astro:assets";
       class="z-10 mx-6 my-12 max-w-100 place-self-center"
       href="/services/"
       variant={2}
-      text="Discover POWER/HOP1000 →"
+      text="EXPLORE OUR MODELS →"
     />
     <img
       class="z-10 w-8 place-self-center pb-6"
@@ -124,10 +125,7 @@ import { Image } from "astro:assets";
     </div>
   </div>
   <div class="m-6">
-    <Accordion
-      title="What am I used for?"
-      content="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi eleifend orci nec nunc sollicitudin venenatis. Vestibulum suscipit in quam eu eleifend. Suspendisse ac elit nunc. Maecenas ut urna facilisis, consectetur nisi eu, molestie mi. Nunc non ligula auctor dui placerat pharetra. Fusce eget ante convallis, congue est placerat, bibendum justo."
-    />
+    <AccordionWhatAmIUsedFor />
   </div>
   <div class="m-6 p-6 bg-dark-bg full-bleed-bg-black text-dark-primary">
     <h2

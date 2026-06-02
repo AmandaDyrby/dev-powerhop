@@ -25,6 +25,22 @@ import productspread from "../assets/productspread.png";
       />
 
       <ProductComparisonTable />
+
+      <div
+        class="pt-0 place-self-center lg:col-start-2 flex flex-col items-center"
+      >
+        <p
+          class="pb-4 font-sans capitalize text-center text-light-primary text-lg tracking-widest"
+        >
+          ₦0 STARTUP COST
+        </p>
+        <Button
+          href="/booking/"
+          variant={3}
+          text="GET STARTED →"
+          class="sticky-get-started"
+        />
+      </div>
     </div>
 
     <div class="productcardlist">
@@ -56,7 +72,12 @@ import productspread from "../assets/productspread.png";
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi eleifend
         orci nec nunc sollicitudin venenatis.
       </p>
-      <Button href="/faq/" variant={3} text="Help" class="service-help-button" />
+      <Button
+        href="/faq/"
+        variant={3}
+        text="Help"
+        class="service-help-button"
+      />
     </section>
   </section>
 </Layout>

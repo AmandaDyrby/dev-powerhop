@@ -1,0 +1,80 @@
+---
+import "../styles/global.css";
+import { Image } from "astro:assets";
+import arrow from "../assets/accordionArrow.svg";
+import usecaseHome from "../assets/usecaseHome.webp";
+import usecaseWork from "../assets/usecaseWork.webp";
+---
+
+<div class="py-1">
+  <div
+    class="accordionTitle font-mono text-lg text-brand-accent bg-dark-bg p-4 cursor-pointer flex justify-between"
+  >
+    <p>WHAT AM I USED FOR?</p>
+    <img id="arrow" src={arrow.src} alt="Arrow" />
+  </div>
+  <div class="accordionContent p-4 bg-dark-border">
+    <div class="md:grid md:grid-cols-2 md:gap-x-6">
+      <p
+        class="font-display font-extrabold text-dark-primary text-4xl pb-2 md:col-start-2"
+      >
+        AT HOME<span class="text-brand">...</span>
+      </p>
+      <Image
+        class="max-h-52 object-cover md:col-start-1 md:row-start-1 md:row-span-2 md:pb-4"
+        src={usecaseHome}
+        alt="Family using Power/Hop at home to watch TV during a power outage"
+      />
+      <p class="font-sans text-dark-primary py-4 md:col-start-2">
+        In your home, a Power/Hop unit can help you charge essential household
+        items and appliances such as freezer or lights - no more struggling with
+        candlelit homework.
+      </p>
+    </div>
+    <div class="md:grid md:grid-cols-2 md:gap-x-6">
+      <p
+        class="font-display font-extrabold text-dark-primary text-4xl pb-2 text-right md:col-start-2 md:text-left"
+      >
+        <span class="text-brand">...</span>OR AT WORK
+      </p>
+      <Image
+        class="max-h-52 object-cover md:col-start-1 md:row-start-1 md:row-span-2"
+        src={usecaseWork}
+        alt="Business using Power/Hop at work to maintain operations during a power outage"
+      />
+      <p class="font-sans text-dark-primary text-right pt-4 pb-2 md:text-left">
+        If your business relies on electric components, don't let a power outage
+        stop you. A backup generator can allow you to continue work and sales as
+        normal.
+      </p>
+    </div>
+  </div>
+</div>
+
+<style>
+  .accordionContent {
+    display: none;
+    overflow: hidden;
+  }
+
+  .accordionTitle.active #arrow {
+    transform: rotate(180deg);
+  }
+</style>
+
+<script>
+  document.querySelectorAll(".accordionTitle").forEach((accordionTitle) => {
+    accordionTitle.addEventListener("click", () => {
+      accordionTitle.classList.toggle("active");
+
+      const accordionContent = accordionTitle.nextElementSibling;
+
+      if (!(accordionContent instanceof HTMLElement)) {
+        return;
+      }
+
+      accordionContent.style.display =
+        accordionContent.style.display === "block" ? "none" : "block";
+    });
+  });
+</script>

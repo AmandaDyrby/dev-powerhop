@@ -44,6 +44,11 @@ const Page = Astro.props.Page;
     <p>3000+ CYCLES</p>
   </div>
   <p>3000+ CYCLES</p>
+  <div>
+    <p class="productstattitle">PRICE</p>
+    <p><span id="font-sans">₦</span>24,000 / month</p>
+  </div>
+  <p><span id="font-sans">₦</span>36,000 / month</p>
 </div>
 
 <style>
@@ -156,6 +161,10 @@ const Page = Astro.props.Page;
     color: #9b9b9b;
     font-weight: 400;
     letter-spacing: 0.03em;
+  }
+
+  #font-sans {
+    font-family: Inter, Arial, Helvetica, sans-serif;
   }
 
   /* Keep the table readable on very narrow screens. */
