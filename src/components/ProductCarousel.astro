@@ -2,7 +2,7 @@
 import { Image } from "astro:assets";
 
 interface CarouselImage {
-  src: ImageMetadata;
+  src: ImageMetadata | string;
   alt: string;
 }
 
@@ -22,15 +22,26 @@ const { images } = Astro.props;
 
   <div class="carousel-frame">
     {
-      images.map((image, index) => (
-        <Image
-          src={image.src}
-          alt={image.alt}
-          class={`carousel-image ${index === 0 ? "is-active" : ""}`}
-          width={520}
-          data-carousel-image
-        />
-      ))
+      images.map((image, index) =>
+        typeof image.src === "string" ? (
+          <img
+            src={image.src}
+            alt={image.alt}
+            class={`carousel-image ${index === 0 ? "is-active" : ""}`}
+            loading={index === 0 ? "eager" : "lazy"}
+            decoding="async"
+            data-carousel-image
+          />
+        ) : (
+          <Image
+            src={image.src}
+            alt={image.alt}
+            class={`carousel-image ${index === 0 ? "is-active" : ""}`}
+            width={520}
+            data-carousel-image
+          />
+        ),
+      )
     }
   </div>
 
@@ -57,8 +68,7 @@ const { images } = Astro.props;
 </section>
 
 <script>
-  const carousel =
-    document.querySelector<HTMLElement>(".product-carousel");
+  const carousel = document.querySelector<HTMLElement>(".product-carousel");
   const images = Array.from(
     document.querySelectorAll<HTMLElement>("[data-carousel-image]"),
   );

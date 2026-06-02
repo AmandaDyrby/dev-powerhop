@@ -1,25 +1,69 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import ProductCarousel from "../components/ProductCarousel.astro";
-import Button from "../components/Button.astro";
-import frontImage from "../assets/powerhop1000/front-1000-png.png";
-import faceImage from "../assets/powerhop1000/face-1000-png.png";
-import backImage from "../assets/powerhop1000/back-1000-png.png";
+import Layout from "../../layouts/Layout.astro";
+import ProductCarousel from "../../components/ProductCarousel.astro";
+import Button from "../../components/Button.astro";
+
+type Product = {
+  modelname: string;
+  imgfront: string | null;
+  imgface: string | null;
+  imgback: string | null;
+};
+
+const { product } = Astro.props as { product: Product };
+
+const getProductImageUrl = (src: string | null) => {
+  if (!src) {
+    return null;
+  }
+
+  if (src.startsWith("http")) {
+    return src
+      .replace("/storage/v1/object/sign/", "/storage/v1/object/public/")
+      .split("?")[0];
+  }
+
+  return `${import.meta.env.SUPABASE_URL}/storage/v1/object/public/products/${src.replace(/^\/+/, "")}`;
+};
 
 const carouselImages = [
   {
-    src: frontImage,
-    alt: "Front view of Power/Hop1000",
+    src: getProductImageUrl(product.imgfront),
+    alt: `Front view of ${product.modelname}`,
   },
   {
-    src: faceImage,
-    alt: "Face view of Power/Hop1000",
+    src: getProductImageUrl(product.imgface),
+    alt: `Face view of ${product.modelname}`,
   },
   {
-    src: backImage,
-    alt: "Back view of Power/Hop1000",
+    src: getProductImageUrl(product.imgback),
+    alt: `Back view of ${product.modelname}`,
   },
-];
+].filter((image): image is { src: string; alt: string } => Boolean(image.src));
+
+export async function getStaticPaths() {
+  const response = await fetch(
+    `${import.meta.env.SUPABASE_URL}/rest/v1/products?select=*`,
+    {
+      headers: {
+        apikey: import.meta.env.SUPABASE_PUBLISHABLE_KEY,
+      },
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch products: ${response.status}`);
+  }
+
+  const products = (await response.json()) as Product[];
+
+  return products.map((product: { modelname: any }) => {
+    return {
+      params: { modelname: String(product.modelname) },
+      props: { product },
+    };
+  });
+}
 ---
 
 <Layout Page="Product Page" Title="Product Page">
@@ -27,7 +71,7 @@ const carouselImages = [
     <ProductCarousel images={carouselImages} />
 
     <div class="product-details">
-      <h1>Power/Hop<span>1000</span></h1>
+      <h1>{product.modelname}</h1>
 
       <div class="productstatistics">
         <p>USABLE POWER</p>
