@@ -12,6 +12,7 @@ interface Props {
   inverter: string;
   image: ImageMetadata;
   alt: string;
+  link: string;
   checked?: boolean;
 }
 
@@ -26,6 +27,7 @@ const {
   inverter,
   image,
   alt,
+  link,
   checked = false,
 } = Astro.props;
 ---
@@ -51,7 +53,11 @@ const {
       <span class="model-spec font-mono text-lg">{price} / MONTH</span>
       <span class="model-spec font-mono text-lg">{wattHours} WH POWER</span>
       <span class="model-spec font-mono text-lg">{inverter} W INVERTER</span>
-      <span class="model-link text-light-muted">Full details</span>
+      <span class="model-link text-light-muted">
+        <a href={link} target="_blank" rel="noopener noreferrer">Full details</a
+        >
+      </span>
+      <!-- <span class="model-link text-light-muted">Full details</span> -->
     </span>
 
     <Image class="model-image" src={image} alt={alt} width={150} />

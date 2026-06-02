@@ -1,5 +1,7 @@
 ---
 const Page = Astro.props.Page;
+import infoIcon from "../assets/infoIcon.svg";
+import MoreInfo from "./MoreInfo.astro";
 ---
 
 <!-- Two-column comparison grid: every direct child becomes one table cell. -->
@@ -10,37 +12,72 @@ const Page = Astro.props.Page;
 
   <!-- Each spec row uses a labelled left cell and a matching value on the right. -->
   <div>
-    <p class="productstattitle">USABLE POWER</p>
+    <div class="flex flex-row gap-x-2">
+      <p class="productstattitle">USABLE POWER</p>
+      <MoreInfo
+        content="Usable power determines how long a battery will last - the higher the WH, the longer the battery will last."
+      />
+    </div>
     <p>1000 WH</p>
   </div>
   <p>2000 WH</p>
   <div>
-    <p class="productstattitle">SURGE PROTECTION</p>
+    <div class="flex flex-row gap-x-2">
+      <p class="productstattitle">SURGE PROTECTION</p>
+      <MoreInfo
+        content="Surge protection is a feature that protects your devices from power surges. A surge is a sudden increase in voltage that can damage your devices. The higher the surge protection, the better protected your devices will be."
+      />
+    </div>
     <p>1000 WH</p>
   </div>
   <p>2000 WH</p>
   <div>
-    <p class="productstattitle">INVERTER</p>
+    <div class="flex flex-row gap-x-2">
+      <p class="productstattitle">INVERTER</p>
+      <MoreInfo
+        content="An inverter converts DC power from the battery into AC power for use with household appliances."
+      />
+    </div>
     <p>500 WH</p>
   </div>
   <p>1000 WH</p>
   <div>
-    <p class="productstattitle">CHARGING TIME</p>
+    <div class="flex flex-row gap-x-2">
+      <p class="productstattitle">CHARGING TIME</p>
+      <MoreInfo
+        content="Charging time refers to the duration it takes to fully charge the battery."
+      />
+    </div>
     <p>~4H</p>
   </div>
   <p>~4H</p>
   <div>
-    <p class="productstattitle">AC INPUT</p>
+    <div class="flex flex-row gap-x-2">
+      <p class="productstattitle">AC INPUT</p>
+      <MoreInfo
+        content="AC input refers to the alternating current voltage that the power station can accept from the grid."
+      />
+    </div>
     <p>90-260 V</p>
   </div>
   <p>90-260 V</p>
   <div>
-    <p class="productstattitle">BATTERY</p>
+    <div class="flex flex-row gap-x-2">
+      <p class="productstattitle">BATTERY</p>
+      <MoreInfo
+        content="The battery is the component that stores energy for later use."
+      />
+    </div>
     <p>LIFEPO₄</p>
   </div>
   <p>LIFEPO₄</p>
   <div>
-    <p class="productstattitle">LIFESPAN</p>
+    <div class="flex flex-row gap-x-2">
+      <p class="productstattitle">LIFESPAN</p>
+      <MoreInfo
+        content="The lifespan of a battery refers to the number of charge and discharge cycles it can undergo before its capacity drops below a certain threshold."
+      />
+    </div>
     <p>3000+ CYCLES</p>
   </div>
   <p>3000+ CYCLES</p>
@@ -158,6 +195,7 @@ const Page = Astro.props.Page;
   /* Spec labels are lighter than values to create the visual hierarchy. */
   .productstattitle {
     margin-bottom: 0.25rem;
+    padding-bottom: 0.25rem;
     color: #9b9b9b;
     font-weight: 400;
     letter-spacing: 0.03em;

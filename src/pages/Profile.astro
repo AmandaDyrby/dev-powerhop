@@ -2,6 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import ActiveUnit from "../components/ActiveUnit.astro";
 import editIcon from "../assets/edit_black.svg";
+import Button from "../components/Button.astro";
 ---
 
 <Layout Page="Profile" Title="Profile">
@@ -31,6 +32,14 @@ import editIcon from "../assets/edit_black.svg";
         card="**** **** **** 5678"
         nextPaymentStatus="Not paid"
       />
+      <div class="place-content-center flex flex-row md:place-content-start">
+        <Button
+          class="md:ml-6 mb-6"
+          href="/booking/"
+          variant={3}
+          text="ADD NEW UNIT →"
+        />
+      </div>
     </div>
     <div
       id="profileInfoContainer"
@@ -62,7 +71,7 @@ import editIcon from "../assets/edit_black.svg";
       margin: 0 1.5rem;
     }
 
-    @media (min-width: 640px) {
+    @media (min-width: 768px) {
       .pageContentContainer {
         display: grid;
         grid-template-columns: 1fr 1fr;
