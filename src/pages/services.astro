@@ -72,7 +72,7 @@ const productCards = products.filter(
     />
 
     <div class="mt-6 md:mt-0 flex flex-col justify-between">
-      <div>
+      <div class="sticky-get-started-wrap">
         <h2 class="font-display text-light-primary text-4xl font-black">
           No hidden fees, an <span class="text-brand">all in one solution.</span
           >
@@ -93,7 +93,6 @@ const productCards = products.filter(
           href="/booking/"
           variant={3}
           text="GET STARTED →"
-          class="sticky-get-started"
         />
       </div>
     </div>
@@ -167,12 +166,14 @@ const productCards = products.filter(
   }
 
   .productcardlist {
+    box-sizing: border-box;
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     width: 100%;
     gap: 2rem;
     justify-items: center;
     margin-top: 4rem;
+    padding: 0 1.5rem;
   }
 
   .service-help {
@@ -203,6 +204,15 @@ const productCards = products.filter(
     width: min(100%, 13rem);
     margin-right: auto;
     margin-left: auto;
+  }
+
+  .sticky-get-started-wrap {
+    display: flex;
+    position: sticky;
+    bottom: 1rem;
+    z-index: 20;
+    justify-content: center;
+    width: 100%;
   }
 
   #heroImg {
@@ -314,7 +324,6 @@ const productCards = products.filter(
       /* gap: 5.5rem; */
       /* justify-items: stretch; */
       margin-top: 4rem;
-      padding: 0 1.5rem;
     }
 
     :global(.productcardlist .productcard) {
@@ -337,9 +346,13 @@ const productCards = products.filter(
       line-height: 1.8;
     }
 
+    :global(.productcardlist .productbuttonwrap) {
+      margin-top: 1.25rem;
+    }
+
     :global(.productcardlist .productbutton) {
       min-width: 13rem;
-      margin-top: 1.25rem;
+      margin: 0;
       padding: 0.6rem 1rem;
       font-size: 0.85rem;
     }

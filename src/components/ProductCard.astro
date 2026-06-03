@@ -38,7 +38,9 @@ const { name, description, image, price, link, alt = name } = Astro.props;
   </p>
   <p class="productprice">{price}</p>
 
-  <Button href={link} variant={1} text={name} class="productbutton" />
+  <div class="productbuttonwrap">
+    <Button href={link} variant={1} text={name} class="productbutton" />
+  </div>
 </div>
 
 <style>
@@ -91,6 +93,13 @@ const { name, description, image, price, link, alt = name } = Astro.props;
     line-height: 1.85;
   }
 
+  .productbuttonwrap {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 1.55rem;
+  }
+
   :global(.productbutton) {
     box-sizing: border-box;
     display: flex;
@@ -99,7 +108,7 @@ const { name, description, image, price, link, alt = name } = Astro.props;
     width: fit-content;
     max-width: 100%;
     min-width: 16.8rem;
-    margin: 1.55rem auto 0;
+    margin: 0;
     padding: 0.72rem 1.15rem;
     background-color: #008751;
     border-color: #008751;

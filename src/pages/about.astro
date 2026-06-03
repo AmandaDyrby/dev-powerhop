@@ -127,9 +127,9 @@ import OurTeam from "../assets/ourTeam.webp";
 
   .about-hero-image {
     position: absolute;
-    inset: 5rem 0 0;
+    inset: 0;
     z-index: 0;
-    clip-path: polygon(0 18%, 100% 0, 100% 78%, 0 100%);
+    clip-path: polygon(0 0, 100% 0, 100% 78%, 0 100%);
   }
 
   .about-hero-image img {
@@ -145,14 +145,14 @@ import OurTeam from "../assets/ourTeam.webp";
 
   @media (max-width: 700px) {
     .about-hero-image {
-      inset: 7rem 0 0;
-      clip-path: polygon(0 12%, 100% 0, 100% 84%, 0 100%);
+      inset: 0;
+      clip-path: polygon(0 0, 100% 0, 100% 84%, 0 100%);
     }
   }
 
   @media (min-width: 768px) {
     .about-hero {
-      margin-top: 2rem;
+      margin-top: 0;
     }
   }
 </style>
