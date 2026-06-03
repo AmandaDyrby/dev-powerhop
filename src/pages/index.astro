@@ -8,6 +8,7 @@ import heroImg from "../assets/hero-img.webp";
 import Arrow from "../assets/accordionArrow.svg";
 import "../styles/global.css";
 import PowerHop1000 from "../assets/powerhop1000/face-1000-png.webp";
+import ProductSpread from "../assets/productspread.png";
 import Star from "../assets/Star.svg";
 import OurTeam from "../assets/ourTeam.webp";
 import { Image } from "astro:assets";
@@ -16,7 +17,7 @@ import { Image } from "astro:assets";
 <Layout Page="Home" Title="Home">
   <div
     id="heroSection"
-    class="relative left-1/2 ml-[-50vw] flex w-screen flex-col justify-center overflow-hidden pt-16 pb-8"
+    class="relative left-1/2 ml-[-50vw] flex w-screen flex-col justify-center overflow-hidden pt-16 pb-8 md:min-h-screen"
   >
     <Image
       src={heroImg}
@@ -41,11 +42,13 @@ import { Image } from "astro:assets";
       variant={2}
       text="EXPLORE OUR MODELS →"
     />
-    <img
-      class="z-10 w-8 place-self-center pb-6"
-      src={Arrow.src}
-      alt="scroll down"
-    />
+    <a
+      class="chevronanimation z-10 w-8 place-self-center pb-6"
+      href="#discoverSection"
+      aria-label="Scroll to next section"
+    >
+      <img src={Arrow.src} alt="" />
+    </a>
   </div>
   <div
     id="discoverSection"
@@ -64,9 +67,14 @@ import { Image } from "astro:assets";
           POWER/<br />HOP<br />SERIES
         </p>
         <img
-          class="col-start-2 row-start-1 -ml-16 mt-6 w-[145%] max-w-none place-self-end [clip-path:polygon(0_0,100%_0,100%_82%,0_100%)] md:-ml-10 md:-translate-y-16 md:max-w-87.5 lg:[clip-path:none]"
+          class="col-start-2 row-start-1 -ml-16 mt-6 block w-[145%] max-w-none place-self-end [clip-path:polygon(0_0,100%_0,100%_82%,0_100%)] md:hidden"
           src={PowerHop1000.src}
           alt="power/hop1000 unit front view"
+        />
+        <img
+          class="col-start-2 row-start-1 mt-10 hidden w-[125%] max-w-none place-self-end md:block md:-translate-y-10"
+          src={ProductSpread.src}
+          alt="power/hop product lineup"
         />
       </div>
     </div>
@@ -89,7 +97,7 @@ import { Image } from "astro:assets";
     </div>
   </div>
   <div
-    class="m-6 md:grid-cols-3 grid md:gap-12 mx-12 mt-12 mb-8 bg-brand-accent full-bleed-bg pt-8 pb-4"
+    class="m-6 md:grid-cols-3 grid md:gap-12 mx-12 mt-12 mb-8 bg-white full-bleed-bg pt-8 pb-4"
   >
     <div class="star-bg">
       <h3
@@ -129,11 +137,13 @@ import { Image } from "astro:assets";
     <AccordionWhatAmIUsedFor />
   </div>
   <div class="m-6 p-6 bg-dark-bg full-bleed-bg-black text-dark-primary">
-    <h2
-      class="font-display text-hero text-dark-primary font-black pb-4 text-right"
-    >
-      Fulfilling real needs for real Nigerians<span class="text-brand">.</span>
-    </h2>
+    <div class="md:mx-auto md:max-w-4xl">
+      <h2
+        class="font-display text-hero text-dark-primary font-black pb-4 text-right"
+      >
+        Fulfilling real needs for real Nigerians<span class="text-brand">.</span>
+      </h2>
+    </div>
     <div>
       <Testimonials
         testimonials={[
@@ -200,14 +210,22 @@ import { Image } from "astro:assets";
 </Layout>
 
 <style define:vars={{ starPattern: `url(${Star.src})` }}>
+  html {
+    scroll-behavior: smooth;
+  }
+
   #heroSection {
     margin-top: -2rem;
     padding-top: 6rem;
     background-color: #1a1a1a; /* Fallback color */
   }
 
+  #discoverSection {
+    scroll-margin-top: 1rem;
+  }
+
   .full-bleed-bg {
-    box-shadow: 0 0 0 100vmax #e0f3eb;
+    box-shadow: 0 0 0 100vmax #ffffff;
     clip-path: inset(0 -100vmax);
   }
 
@@ -220,5 +238,37 @@ import { Image } from "astro:assets";
     background-image: var(--starPattern);
     background-repeat: no-repeat;
     background-position: right top;
+  }
+
+  .chevronanimation {
+    display: block;
+    animation: soft-chevron-bounce 1.8s ease-in-out infinite;
+    will-change: transform;
+  }
+
+  .chevronanimation img {
+    display: block;
+    width: 100%;
+  }
+
+  @keyframes soft-chevron-bounce {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(0.45rem);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    .chevronanimation {
+      animation: none;
+    }
   }
 </style>

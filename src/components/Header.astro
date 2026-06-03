@@ -2,6 +2,9 @@
 import logo from "../assets/logo.svg";
 import "../styles/global.css";
 
+const { Page } = Astro.props;
+const isHomePage = Page === "Home";
+
 const normalizePath = (path: string) =>
   path === "/" ? path : path.replace(/\/$/, "");
 const currentPath = normalizePath(Astro.url.pathname);
@@ -19,7 +22,10 @@ const activeClass = (href: string) => {
 };
 ---
 
-<header id="siteHeader" class="bg-light-surface">
+<header
+  id="siteHeader"
+  class:list={["bg-light-surface", { "home-header": isHomePage }]}
+>
   <div class="headerContents">
     <!-- logos -->
     <div id="mobileAlwaysVisible">
@@ -88,7 +94,7 @@ const activeClass = (href: string) => {
           class="mobileClosedLogo text-4xl font-display font-black"
           aria-label="PowerHop home"
         >
-          <span>POWER</span><span>HOP</span>
+          <span>POWER</span><span class="headerhopspan">HOP</span>
         </a>
         <div id="desktopNav">
           <a
@@ -153,6 +159,33 @@ const activeClass = (href: string) => {
       z-index: 1000;
       background: #f7f7f7;
       border-bottom: 1px solid #aaaaaa;
+    }
+
+    .headerContents {
+      position: relative;
+      z-index: 1;
+    }
+
+    header.home-header {
+      background: transparent;
+      border-bottom: 0;
+    }
+
+    header.home-header::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      z-index: 0;
+      height: calc(100% + 2.5rem);
+      pointer-events: none;
+      background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.42) 0%,
+        rgba(0, 0, 0, 0.24) 52%,
+        rgba(0, 0, 0, 0) 100%
+      );
     }
 
     a {
@@ -266,6 +299,15 @@ const activeClass = (href: string) => {
         left: 0;
       }
 
+      header.home-header {
+        background: #f7f7f7;
+        border-bottom: 1px solid #aaaaaa;
+      }
+
+      header.home-header::before {
+        display: none;
+      }
+
       header.mobile-menu-open {
         background: #0a0a0a;
         border-bottom: 0;
@@ -309,6 +351,12 @@ const activeClass = (href: string) => {
     }
 
     @media (min-width: 768px) {
+      header.home-header {
+        position: fixed;
+        right: 0;
+        left: 0;
+      }
+
       /* hide mobile version when on desktop */
       #mobileAlwaysVisible,
       #mobileMenu {
@@ -328,6 +376,25 @@ const activeClass = (href: string) => {
         display: flex;
         gap: 2rem;
         justify-content: flex-end;
+      }
+
+      header.home-header .desktopMenu .mobileClosedLogo,
+      header.home-header .desktopMenu .mobileClosedLogo span:first-child,
+      header.home-header #desktopNav a {
+        color: #f5f5f5 !important;
+      }
+
+      header.home-header .desktopMenu .mobileClosedLogo .headerhopspan {
+        color: #00a862 !important;
+      }
+
+      header.home-header #desktopNav a:hover,
+      header.home-header #desktopNav a.active {
+        color: #cdf1e2 !important;
+      }
+
+      header.home-header #desktopNav a.active {
+        text-decoration-color: #cdf1e2 !important;
       }
     }
   </style>
