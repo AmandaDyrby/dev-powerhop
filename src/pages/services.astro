@@ -10,33 +10,12 @@ import "../styles/global.css";
 import productspread from "../assets/productspread.png";
 import { ACTION_QUERY_PARAMS } from "astro:actions";
 import hero from "../assets/testimonials/ChatGPT_Image_Apr_27_2026_08_51_14_AM.webp";
-
-type Product = {
-  id: number;
-  modelname: string;
-  active: boolean;
-  price: number | null;
-  productblurb: string | null;
-  imgfront: string | null;
-};
+import { fetchActiveProducts, type Product } from "../lib/products";
 
 // Load active products from Supabase so the product cards stay data-driven.
-const response = await fetch(
-  `${import.meta.env.SUPABASE_URL}/rest/v1/products?select=id,modelname,active,price,productblurb,imgfront&active=eq.true&order=id.asc`,
-  {
-    headers: {
-      apikey: import.meta.env.SUPABASE_PUBLISHABLE_KEY,
-      Authorization: `Bearer ${import.meta.env.SUPABASE_PUBLISHABLE_KEY}`,
-    },
-  },
+const products = await fetchActiveProducts(
+  "id,modelname,active,price,productblurb,imgfront",
 );
-
-if (!response.ok) {
-  throw new Error(`Failed to fetch products: ${response.status}`);
-}
-
-// Product list used to render the services page cards.
-const products = (await response.json()) as Product[];
 
 // Helpers for displaying prices and model names in a customer-friendly format.
 const formatNumber = (value: number | null) =>
