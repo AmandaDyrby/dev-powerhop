@@ -1,3 +1,4 @@
+// Product shape returned by the Supabase products table.
 export type Product = {
   id: number;
   modelname: string;
@@ -35,12 +36,15 @@ export type Product = {
   imgback: string | null;
 };
 
+// Environment variables required to connect to Supabase.
 const requiredEnv = {
   SUPABASE_URL: import.meta.env.SUPABASE_URL,
   SUPABASE_PUBLISHABLE_KEY: import.meta.env.SUPABASE_PUBLISHABLE_KEY,
 };
 
+// Validate Supabase config before building the request URL and auth key.
 function getSupabaseConfig() {
+  // Collect missing values so the error message can name every missing variable.
   const missing = Object.entries(requiredEnv)
     .filter(([, value]) => !value)
     .map(([name]) => name);
@@ -53,15 +57,18 @@ function getSupabaseConfig() {
     );
   }
 
+  // Point the request at the products REST endpoint.
   return {
     url: new URL("/rest/v1/products", requiredEnv.SUPABASE_URL),
     key: requiredEnv.SUPABASE_PUBLISHABLE_KEY,
   };
 }
 
+// Fetch all active products, ordered by id, with an optional Supabase select list.
 export async function fetchActiveProducts(select = "*") {
   const { url, key } = getSupabaseConfig();
 
+  // Add Supabase query parameters for fields, active status, and display order.
   url.searchParams.set("select", select);
   url.searchParams.set("active", "eq.true");
   url.searchParams.set("order", "id.asc");
@@ -73,9 +80,11 @@ export async function fetchActiveProducts(select = "*") {
     },
   });
 
+  // Fail the build/request if Supabase returns an error.
   if (!response.ok) {
     throw new Error(`Failed to fetch products: ${response.status}`);
   }
 
+  // Return the response as typed product data for pages and components.
   return (await response.json()) as Product[];
 }

@@ -1,14 +1,18 @@
 ---
+// Page layout, product image carousel, CTA button, and product data utilities.
 import Layout from "../../layouts/Layout.astro";
 import ProductCarousel from "../../components/ProductCarousel.astro";
 import Button from "../../components/Button.astro";
 import { fetchActiveProducts, type Product } from "../../lib/products";
 
+// Product data is passed in by getStaticPaths for the current model URL.
 const { product } = Astro.props as { product: Product };
 
+// Format numbers with commas for prices, watt-hours, cycles, and watt values.
 const formatNumber = (value: number | null) =>
   value === null ? null : new Intl.NumberFormat("en-US").format(value);
 
+// Split model names like "powerhop1000" into styled text parts.
 const formatModelName = (modelname: string) => {
   const match = modelname.match(/^powerhop(.+)$/i);
 
@@ -19,6 +23,7 @@ const formatModelName = (modelname: string) => {
 
 const modelName = formatModelName(product.modelname);
 
+// Build the carousel image list and remove any missing image fields.
 const carouselImages = [
   {
     src: product.imgfront,
@@ -37,6 +42,7 @@ const carouselImages = [
     typeof image.src === "string" && image.src.trim().length > 0,
 );
 
+// Product specification rows shown in the stats table.
 const productStats = [
   [
     "USABLE POWER",
@@ -73,12 +79,14 @@ const productStats = [
   ],
 ].filter((stat): stat is [string, string] => Boolean(stat[1]));
 
+// Extra traits are stored as a comma-separated string in the product data.
 const extraTraits =
   product.extratraits
     ?.split(",")
     .map((trait) => trait.trim())
     .filter(Boolean) ?? [];
 
+// Feature icons are rendered only when the matching product flag is enabled.
 const productFeatures = [
   ["feature-lights", "Lights"],
   ["feature-fan", "Fan"],
@@ -100,6 +108,7 @@ const productFeatures = [
 const formattedPrice =
   product.price === null ? null : `\u20a6${formatNumber(product.price)}`;
 
+// Generate one static page for every active product model.
 export async function getStaticPaths() {
   const products = await fetchActiveProducts();
 
@@ -113,9 +122,12 @@ export async function getStaticPaths() {
 ---
 
 <Layout Page={product.modelname} Title={product.modelname}>
+  <!-- Product detail layout: carousel, stats, description, CTA, features, and support links. -->
   <section class="product-page">
+    <!-- Product image gallery for front, face, and back images. -->
     <ProductCarousel images={carouselImages} />
 
+    <!-- Main product information: model name, stats table, extra traits, and price. -->
     <div class="product-details">
       <h1>{modelName.prefix}<span>{modelName.number}</span></h1>
 
@@ -150,12 +162,14 @@ export async function getStaticPaths() {
       }
     </div>
 
+    <!-- Product description from the database, shown only when available. -->
     {
       product.productdescription && (
         <p class="product-description">{product.productdescription}</p>
       )
     }
 
+    <!-- Booking CTA: sticky on mobile and inline on desktop. -->
     <Button
       href="/booking/"
       variant={3}
@@ -163,6 +177,7 @@ export async function getStaticPaths() {
       class="sticky-get-started"
     />
 
+    <!-- Power features: shows which common devices this model can support. -->
     <section class="power-features">
       <h2>What can I power</h2>
       {product.productblurb && <p>{product.productblurb}</p>}
@@ -180,6 +195,7 @@ export async function getStaticPaths() {
       <p class="feature-more">...and much more.</p>
     </section>
 
+    <!-- Specifications dropdown, displayed only when specs text exists. -->
     {
       product.specs && (
         <details class="specsdropdown">
@@ -189,6 +205,7 @@ export async function getStaticPaths() {
       )
     }
 
+    <!-- Cross-link back to all models for visitors who need a different size. -->
     <section class="need-more">
       <h2>Need more</h2>
       <p>
@@ -202,6 +219,7 @@ export async function getStaticPaths() {
 </Layout>
 
 <style>
+  /* Main mobile-first product page grid. */
   .product-page {
     display: grid;
     gap: 2.5rem;
@@ -213,11 +231,13 @@ export async function getStaticPaths() {
     padding: 0 10px 5.5rem;
   }
 
+  /* Product heading and stats area. */
   .product-details {
     width: min(100%, 30rem);
     justify-self: center;
   }
 
+  /* Shared product page heading styles. */
   h1 {
     margin: 0 0 1.25rem;
     color: #111111;
@@ -246,6 +266,7 @@ export async function getStaticPaths() {
     color: #008751;
   }
 
+  /* Shared body copy styling for description and informational sections. */
   .product-description,
   .power-features > p,
   .need-more p {
@@ -257,6 +278,7 @@ export async function getStaticPaths() {
     line-height: 1.7;
   }
 
+  /* Two-column specification table for key product stats. */
   .productstatistics {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -265,6 +287,7 @@ export async function getStaticPaths() {
     background: #ffffff;
   }
 
+  /* Individual stat cells and the full-width extra traits row. */
   .productstatistics > p,
   .extrafeatures {
     margin: 0;
@@ -291,6 +314,7 @@ export async function getStaticPaths() {
     margin-bottom: 0;
   }
 
+  /* Price block shown under the product stats. */
   .productprice {
     display: grid;
     justify-items: end;
@@ -325,6 +349,7 @@ export async function getStaticPaths() {
     margin-top: 1.35rem;
   }
 
+  /* Mobile sticky booking button. */
   :global(.sticky-get-started) {
     position: sticky;
     bottom: 1rem;
@@ -334,11 +359,13 @@ export async function getStaticPaths() {
     box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.18);
   }
 
+  /* Expandable specifications panel. */
   .specsdropdown {
     width: min(100%, 30rem);
     justify-self: center;
   }
 
+  /* Specifications summary row with custom chevron. */
   .specsdropdown summary {
     position: relative;
     display: flex;
@@ -391,6 +418,7 @@ export async function getStaticPaths() {
     transform: translateY(-50%) rotate(45deg);
   }
 
+  /* Specifications body text. */
   .specsdropdown p {
     margin: 0;
     background: #1b1b1b;
@@ -401,6 +429,7 @@ export async function getStaticPaths() {
     padding: 1.6rem 1.8rem 1.75rem;
   }
 
+  /* Device feature section under the main product details. */
   .power-features {
     display: grid;
     gap: 1.35rem;
@@ -429,6 +458,7 @@ export async function getStaticPaths() {
     justify-items: center;
   }
 
+  /* Individual feature icon and label. */
   .feature {
     display: grid;
     justify-items: center;
@@ -460,6 +490,7 @@ export async function getStaticPaths() {
     text-align: center;
   }
 
+  /* Bottom callout linking back to the full model list. */
   .need-more {
     display: grid;
     gap: 0.75rem;
@@ -468,6 +499,7 @@ export async function getStaticPaths() {
     margin: 0 auto;
   }
 
+  /* Desktop layout: carousel on the left and product details on the right. */
   @media (min-width: 56rem) {
     .product-page {
       grid-template-columns: minmax(0, 34rem) minmax(0, 30rem);
