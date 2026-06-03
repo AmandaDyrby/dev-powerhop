@@ -1,6 +1,7 @@
 ---
 import { Image } from "astro:assets";
 
+// A carousel image can be either an Astro image asset or an external string URL.
 interface CarouselImage {
   src: ImageMetadata | string;
   alt: string;
@@ -12,9 +13,11 @@ interface Props {
 
 const { images = [] } = Astro.props;
 
+// Used to hide carousel controls when there is only one product image.
 const hasMultipleImages = images.length > 1;
 ---
 
+<!-- Product image carousel: shows product photos with optional arrows and dots. -->
 <section
   class:list={["product-carousel", !hasMultipleImages && "single-image"]}
   aria-label="Product images"
@@ -23,6 +26,7 @@ const hasMultipleImages = images.length > 1;
 >
   {
     hasMultipleImages && (
+      // Previous arrow only appears when there is more than one image.
       <button
         class="carousel-arrow carousel-arrow-left"
         type="button"
@@ -35,6 +39,7 @@ const hasMultipleImages = images.length > 1;
   <div class="carousel-frame">
     {
       images.length > 0 ? (
+        // Render each image, making the first one visible by default.
         images.map((image, index) =>
           typeof image.src === "string" ? (
             <img
@@ -56,6 +61,7 @@ const hasMultipleImages = images.length > 1;
           ),
         )
       ) : (
+        // Fallback message shown when the product has no images yet.
         <div class="carousel-placeholder">Product image coming soon</div>
       )
     }
@@ -63,6 +69,7 @@ const hasMultipleImages = images.length > 1;
 
   {
     hasMultipleImages && (
+      // Next arrow only appears when there is more than one image.
       <button
         class="carousel-arrow carousel-arrow-right"
         type="button"
@@ -74,6 +81,7 @@ const hasMultipleImages = images.length > 1;
 
   {
     hasMultipleImages && (
+      // Dot controls let users jump directly to a specific product image.
       <div class="carousel-dots" aria-label="Choose product image">
         {images.map((_, index) => (
           <button
@@ -91,9 +99,11 @@ const hasMultipleImages = images.length > 1;
 </section>
 
 <script>
+  // Initialize every product carousel on the page.
   document
     .querySelectorAll<HTMLElement>("[data-product-carousel]")
     .forEach((carousel) => {
+      // Cache carousel images, controls, and dots for this specific instance.
       const images = Array.from(
         carousel.querySelectorAll<HTMLElement>("[data-carousel-image]"),
       );
@@ -109,6 +119,7 @@ const hasMultipleImages = images.length > 1;
 
       let activeIndex = 0;
 
+      // Show the requested image and wrap around at the first/last image.
       const showImage = (nextIndex: number) => {
         if (images.length === 0) {
           return;
@@ -127,17 +138,20 @@ const hasMultipleImages = images.length > 1;
         });
       };
 
+      // Arrow buttons move one image backward or forward.
       previousButton?.addEventListener("click", () =>
         showImage(activeIndex - 1),
       );
       nextButton?.addEventListener("click", () => showImage(activeIndex + 1));
 
+      // Dot buttons jump to the image matching their data index.
       dots.forEach((dot) => {
         dot.addEventListener("click", () => {
           showImage(Number(dot.dataset.carouselIndex || 0));
         });
       });
 
+      // Keyboard controls support left/right arrow navigation when focused.
       carousel.addEventListener("keydown", (event) => {
         if (event.key === "ArrowLeft") {
           showImage(activeIndex - 1);
@@ -151,6 +165,7 @@ const hasMultipleImages = images.length > 1;
 </script>
 
 <style>
+  /* Carousel shell: center image frame with optional arrows on each side. */
   .product-carousel {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr) auto;
@@ -158,10 +173,12 @@ const hasMultipleImages = images.length > 1;
     width: min(100%, 24rem);
   }
 
+  /* Single-image products do not reserve columns for hidden arrows. */
   .product-carousel.single-image {
     grid-template-columns: minmax(0, 1fr);
   }
 
+  /* Fixed-ratio image stage that keeps product cards visually consistent. */
   .carousel-frame {
     position: relative;
     display: grid;
@@ -172,6 +189,7 @@ const hasMultipleImages = images.length > 1;
     overflow: hidden;
   }
 
+  /* Placeholder styling for products without image data. */
   .carousel-placeholder {
     width: 86%;
     color: #737373;
@@ -182,6 +200,7 @@ const hasMultipleImages = images.length > 1;
     text-transform: uppercase;
   }
 
+  /* Images are stacked in the same frame; only the active one is visible. */
   .carousel-image {
     position: absolute;
     inset: 7%;
@@ -194,11 +213,13 @@ const hasMultipleImages = images.length > 1;
     transition: opacity 160ms ease;
   }
 
+  /* Active image is brought above the inactive transparent images. */
   .carousel-image.is-active {
     opacity: 1;
     z-index: 1;
   }
 
+  /* Arrow button base shape; the chevron is drawn with the ::before border. */
   .carousel-arrow {
     width: 1.65rem;
     height: 3rem;
@@ -208,6 +229,7 @@ const hasMultipleImages = images.length > 1;
     position: relative;
   }
 
+  /* Shared chevron shape used by both arrow buttons. */
   .carousel-arrow::before {
     content: "";
     position: absolute;
@@ -219,6 +241,7 @@ const hasMultipleImages = images.length > 1;
     border-right: 2px solid #111111;
   }
 
+  /* Rotate the shared chevron shape for left and right directions. */
   .carousel-arrow-left::before {
     transform: rotate(-135deg);
   }
@@ -227,6 +250,7 @@ const hasMultipleImages = images.length > 1;
     transform: rotate(45deg);
   }
 
+  /* Dot navigation sits below the full carousel width. */
   .carousel-dots {
     grid-column: 1 / -1;
     display: flex;
@@ -235,6 +259,7 @@ const hasMultipleImages = images.length > 1;
     margin-top: 0.75rem;
   }
 
+  /* Inactive dot styling. */
   .carousel-dot {
     width: 0.55rem;
     height: 0.55rem;
@@ -245,11 +270,13 @@ const hasMultipleImages = images.length > 1;
     padding: 0;
   }
 
+  /* Active dot uses the brand green to match the visible image. */
   .carousel-dot.is-active {
     border-color: #008751;
     background: #008751;
   }
 
+  /* Accessible focus ring for keyboard users. */
   .carousel-arrow:focus-visible,
   .carousel-dot:focus-visible {
     outline: 2px solid #008751;

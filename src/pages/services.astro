@@ -1,4 +1,5 @@
 ---
+// Page layout, product components, and assets used on the Services page.
 import Layout from "../layouts/Layout.astro";
 import { Image } from "astro:assets";
 import Button from "../components/Button.astro";
@@ -19,6 +20,7 @@ type Product = {
   imgfront: string | null;
 };
 
+// Load active products from Supabase so the product cards stay data-driven.
 const response = await fetch(
   `${import.meta.env.SUPABASE_URL}/rest/v1/products?select=id,modelname,active,price,productblurb,imgfront&active=eq.true&order=id.asc`,
   {
@@ -33,8 +35,10 @@ if (!response.ok) {
   throw new Error(`Failed to fetch products: ${response.status}`);
 }
 
+// Product list used to render the services page cards.
 const products = (await response.json()) as Product[];
 
+// Helpers for displaying prices and model names in a customer-friendly format.
 const formatNumber = (value: number | null) =>
   value === null ? null : new Intl.NumberFormat("en-US").format(value);
 
@@ -50,6 +54,7 @@ const formatModelName = (modelname: string) => {
   return match ? `Power/Hop${match[1]}` : modelname;
 };
 
+// Only render product cards for products that have a usable front image.
 const productCards = products.filter(
   (product): product is Product & { imgfront: string } =>
     typeof product.imgfront === "string" && product.imgfront.trim().length > 0,
@@ -57,12 +62,14 @@ const productCards = products.filter(
 ---
 
 <Layout Page="OurServices" Title="Our Services">
+  <!-- Page intro: main Services page heading. -->
   <section class="services-page">
     <h1 class="services-title">
       The Power/Hop series<span class="text-brand">:</span>
     </h1>
   </section>
 
+  <!-- Benefits overview: product image, subscription details, and booking call to action. -->
   <div class="mx-6 md:grid md:grid-cols-2 md:gap-12">
     <Image
       id="heroImg"
@@ -98,6 +105,7 @@ const productCards = products.filter(
     </div>
   </div>
 
+  <!-- Product cards: generated from active Supabase products. -->
   <div class="productcardlist">
     {
       productCards.map((product) => (
@@ -112,10 +120,12 @@ const productCards = products.filter(
       ))
     }
   </div>
+  <!-- Comparison table: helps customers compare models. -->
   <div class="mt-12 mx-6">
     <ProductComparisonTable3Column />
   </div>
 
+  <!-- Help section: sends visitors to FAQ support content. -->
   <section class="service-help" aria-labelledby="service-help-title">
     <h2 id="service-help-title">
       Need a hand<span class="text-brand">?</span>
@@ -133,6 +143,7 @@ const productCards = products.filter(
 </Layout>
 
 <style>
+  /* Intro heading layout. */
   .services-page {
     box-sizing: border-box;
     width: min(100%, 64rem);
@@ -150,6 +161,7 @@ const productCards = products.filter(
     text-transform: uppercase;
   }
 
+  /* Hero and product image layout. */
   .services-hero {
     display: grid;
     gap: 2rem;
@@ -165,6 +177,7 @@ const productCards = products.filter(
     object-fit: contain;
   }
 
+  /* Product card grid shared by mobile and desktop layouts. */
   .productcardlist {
     box-sizing: border-box;
     display: grid;
@@ -176,6 +189,7 @@ const productCards = products.filter(
     padding: 0 1.5rem;
   }
 
+  /* Support/FAQ callout near the bottom of the page. */
   .service-help {
     width: min(100%, 52rem);
     margin: 4rem auto 0;
@@ -206,6 +220,7 @@ const productCards = products.filter(
     margin-left: auto;
   }
 
+  /* Keeps the call-to-action area visible while scrolling the services intro. */
   .sticky-get-started-wrap {
     display: flex;
     position: sticky;
@@ -219,6 +234,7 @@ const productCards = products.filter(
     object-fit: cover;
   }
 
+  /* Mobile services page adjustments. */
   @media (max-width: 63.9375rem) {
     .services-page {
       width: 100%;
@@ -276,6 +292,7 @@ const productCards = products.filter(
     }
   }
 
+  /* Two-column card grid for tablet-sized screens. */
   @media (min-width: 42rem) {
     .productcardlist {
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -283,6 +300,7 @@ const productCards = products.filter(
     }
   }
 
+  /* Desktop services layout and product card sizing. */
   @media (min-width: 64rem) {
     .services-page {
       padding: 0;

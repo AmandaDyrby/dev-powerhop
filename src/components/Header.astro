@@ -1,13 +1,17 @@
 ---
+// Header logo, global styles, and page state used for active navigation links.
 import logo from "../assets/logo.svg";
 import "../styles/global.css";
 
 const { Page } = Astro.props;
 const isHomePage = Page === "Home";
 
+// Normalize URLs so active link checks work with or without trailing slashes.
 const normalizePath = (path: string) =>
   path === "/" ? path : path.replace(/\/$/, "");
 const currentPath = normalizePath(Astro.url.pathname);
+
+// Returns the active class for the nav item that matches the current page.
 const activeClass = (href: string) => {
   const normalizedHref = normalizePath(href);
 
@@ -27,7 +31,7 @@ const activeClass = (href: string) => {
   class:list={["bg-light-surface", { "home-header": isHomePage }]}
 >
   <div class="headerContents">
-    <!-- logos -->
+    <!-- Mobile header bar: logo variants and hamburger toggle. -->
     <div id="mobileAlwaysVisible">
       <a
         href="/"
@@ -43,7 +47,7 @@ const activeClass = (href: string) => {
       >
         <span>POWER</span><span>HOP</span>
       </a>
-      <!-- Hamburger -->
+      <!-- Hamburger button: opens and closes the mobile menu. -->
       <button
         type="button"
         class="hamburger"
@@ -57,7 +61,7 @@ const activeClass = (href: string) => {
       </button>
     </div>
 
-    <!-- Mobile -->
+    <!-- Mobile navigation: shown below the header when the hamburger is open. -->
     <nav id="mobileMenu" class="hidden">
       <a
         href="/"
@@ -86,7 +90,7 @@ const activeClass = (href: string) => {
       >
     </nav>
 
-    <!-- Desktop -->
+    <!-- Desktop navigation: logo and horizontal menu for wider screens. -->
     <div class="desktopMenu">
       <div id="desktopGrid">
         <a
@@ -129,10 +133,12 @@ const activeClass = (href: string) => {
   </div>
 
   <script type="module">
+    // Mobile menu controls and click-away closing behavior.
     const siteHeader = document.getElementById("siteHeader");
     const hamburger = document.getElementById("hamburger");
     const mobileMenu = document.getElementById("mobileMenu");
 
+    // Keep menu visibility, header styling, and aria-expanded in sync.
     const setMobileMenuOpen = (isOpen) => {
       mobileMenu.classList.toggle("hidden", !isOpen);
       siteHeader.classList.toggle("mobile-menu-open", isOpen);
@@ -153,6 +159,7 @@ const activeClass = (href: string) => {
   </script>
 
   <style>
+    /* Sticky header shell and default light styling. */
     header {
       position: sticky;
       top: 0;
@@ -166,6 +173,7 @@ const activeClass = (href: string) => {
       z-index: 1;
     }
 
+    /* Transparent desktop header treatment used over the homepage hero. */
     header.home-header {
       background: transparent;
       border-bottom: 0;
@@ -194,6 +202,7 @@ const activeClass = (href: string) => {
       color: #0a0a0a;
     }
 
+    /* Active and hover states for shared navigation links. */
     #profile-log-in {
       text-decoration: underline;
       text-decoration-thickness: 0.12em;
@@ -214,7 +223,7 @@ const activeClass = (href: string) => {
       text-underline-offset: 0.18em;
     }
 
-    /* mobile specific styling */
+    /* Mobile-specific layout and hamburger styling. */
     #mobileAlwaysVisible {
       display: flex;
       align-items: center;
@@ -283,7 +292,7 @@ const activeClass = (href: string) => {
       text-align: right;
     }
 
-    /* hide desktop version when on mobile */
+    /* Hide desktop version when on mobile. */
     .desktopMenu {
       display: none;
     }
@@ -292,6 +301,7 @@ const activeClass = (href: string) => {
       display: none;
     }
 
+    /* Fixed mobile header and open-menu color changes. */
     @media (max-width: 767px) {
       header {
         position: fixed;
@@ -350,6 +360,7 @@ const activeClass = (href: string) => {
       }
     }
 
+    /* Desktop header layout and homepage color overrides. */
     @media (min-width: 768px) {
       header.home-header {
         position: fixed;
@@ -357,7 +368,7 @@ const activeClass = (href: string) => {
         left: 0;
       }
 
-      /* hide mobile version when on desktop */
+      /* Hide mobile version when on desktop. */
       #mobileAlwaysVisible,
       #mobileMenu {
         display: none;

@@ -1,4 +1,5 @@
 ---
+// Page layout, global styles, and team images used on the About page.
 import Layout from "../layouts/Layout.astro";
 import "../styles/global.css";
 import JackBird from "../assets/JackBird.webp";
@@ -9,10 +10,11 @@ import OurTeam from "../assets/ourTeam.webp";
 ---
 
 <Layout Page="AboutUs" Title="About Us">
+  <!-- Hero section: main About page headline with the team photo background. -->
   <section class="about-hero" aria-labelledby="about-hero-title">
     <div
       aria-hidden="true"
-      class="pointer-events-none absolute inset-x-0 top-0 z-[1] h-[52%] bg-[linear-gradient(170deg,_rgba(247,247,247,1)_0%,_rgba(247,247,247,0.95)_42%,_rgba(247,247,247,0)_76%)]"
+      class="pointer-events-none absolute inset-x-0 top-0 z-1 h-[52%] bg-[linear-gradient(170deg,rgba(247,247,247,1)_0%,rgba(247,247,247,0.95)_42%,rgba(247,247,247,0)_76%)]"
     >
     </div>
     <h1
@@ -26,6 +28,7 @@ import OurTeam from "../assets/ourTeam.webp";
       <img fetchpriority="high" src={OurTeam.src} alt="Our team" />
     </div>
   </section>
+  <!-- Company story: explains the problem PowerHop is solving and why the team built it. -->
   <p class="text-lg text-light-secondary font-sans m-6">
     We're a small team from Lagos — and we're tired of the same problem everyone
     else here is tired of. <br />
@@ -46,6 +49,7 @@ import OurTeam from "../assets/ourTeam.webp";
     we're building — and we're building it here, with people from here, for
     people here.
   </p>
+  <!-- Team grid: introduces the core PowerHop team members and their roles. -->
   <div>
     <h3
       class="font-sans capitalize text-light-primary text-2xl tracking-widest mx-6 mt-10"
@@ -53,7 +57,7 @@ import OurTeam from "../assets/ourTeam.webp";
       MEET THE TEAM!
     </h3>
     <div
-      class="mx-6 mt-6 mb-18 grid grid-cols-[minmax(100px,_250px)_minmax(100px,_250px)] gap-6 md:grid-cols-[minmax(100px,_250px)_minmax(100px,_250px)_minmax(100px,_250px)] lg:grid-cols-[minmax(100px,_200px)_minmax(100px,_200px)_minmax(100px,_200px)_minmax(100px,_200px)]"
+      class="mx-6 mt-6 mb-18 grid grid-cols-[minmax(100px,250px)_minmax(100px,250px)] gap-6 md:grid-cols-[minmax(100px,250px)_minmax(100px,250px)_minmax(100px,250px)] lg:grid-cols-[minmax(100px,200px)_minmax(100px,200px)_minmax(100px,200px)_minmax(100px,200px)]"
     >
       <div class="employee">
         <img class="h-48 object-cover mb-4" src={JaneDoe.src} alt="Jane Doe" />
@@ -97,6 +101,7 @@ import OurTeam from "../assets/ourTeam.webp";
       </div>
     </div>
   </div>
+  <!-- Recruitment section: invites visitors to contact PowerHop about joining the team. -->
   <h2 class="text-hero font-black font-display m-6">
     <span text-light-primary>Want to join our mission</span><span
       class="text-brand">?</span
@@ -112,6 +117,7 @@ import OurTeam from "../assets/ourTeam.webp";
 </Layout>
 
 <style>
+  /* Hero image layout and angled bottom edge. */
   .about-hero {
     position: relative;
     min-height: clamp(36rem, 78vw, 58rem);
@@ -143,6 +149,7 @@ import OurTeam from "../assets/ourTeam.webp";
     margin-top: 0rem;
   }
 
+  /* Mobile hero crop adjustment. */
   @media (max-width: 700px) {
     .about-hero-image {
       inset: 0;
@@ -150,6 +157,7 @@ import OurTeam from "../assets/ourTeam.webp";
     }
   }
 
+  /* Desktop spacing reset for the hero section. */
   @media (min-width: 768px) {
     .about-hero {
       margin-top: 0;

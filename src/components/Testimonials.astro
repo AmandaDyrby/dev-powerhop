@@ -1,4 +1,5 @@
 ---
+// Component styles and default testimonial images.
 import "../styles/global.css";
 import Img1 from "../assets/testimonials/ChatGPT_Image_Apr_27_2026_08_51_14_AM.webp";
 import Img2 from "../assets/testimonials/ChatGPT_Image_Apr_27_2026_08_51_19_AM.webp";
@@ -21,8 +22,10 @@ interface Props {
   }[];
 }
 
+// Images are reused in order when testimonials do not provide a custom image.
 const testimonialImages = [Img1.src, Img2.src, Img3.src, Img4.src];
 
+// Fallback content keeps the component usable if no testimonial array is passed in.
 const fallbackTestimonials = [
   {
     city: Astro.props.city || "Lagos",
@@ -34,10 +37,12 @@ const fallbackTestimonials = [
   },
 ];
 
+// Prefer the full testimonials prop, otherwise fall back to a single testimonial.
 const testimonialContent = Astro.props.testimonials?.length
   ? Astro.props.testimonials
   : fallbackTestimonials;
 
+// Attach an image to every testimonial before rendering the carousel.
 const testimonials = testimonialContent.map((testimonial, index) => ({
   ...testimonial,
   image:
@@ -45,12 +50,14 @@ const testimonials = testimonialContent.map((testimonial, index) => ({
 }));
 ---
 
+<!-- Testimonial carousel: displays one customer story at a time. -->
 <div
   id="fullContainer"
   class="relative md:mx-auto md:max-w-4xl"
   data-testimonials-carousel
   data-testimonials={JSON.stringify(testimonials)}
 >
+  <!-- Previous button for desktop carousel navigation. -->
   <button
     class="absolute -left-3 top-1/2 z-20 hidden -translate-y-1/2 text-dark-primary transition-colors hover:text-brand focus:outline-none focus:ring-2 focus:ring-brand md:block"
     type="button"
@@ -60,14 +67,15 @@ const testimonials = testimonialContent.map((testimonial, index) => ({
     <span class="block text-hero leading-none">&lt;</span>
   </button>
 
+  <!-- Active testimonial panel with image background, quote, and person details. -->
   <div
-    class="relative min-h-[28rem] overflow-hidden bg-dark-surface bg-cover bg-center px-6 py-8 md:min-h-[34rem] md:px-18 md:py-12"
+    class="relative min-h-112 overflow-hidden bg-dark-surface bg-cover bg-center px-6 py-8 md:min-h-136 md:px-18 md:py-12"
     style={`background-image: url('${testimonials[0].image}');`}
     data-testimonials-panel
   >
     <div class="absolute inset-0 bg-dark-bg/65"></div>
 
-    <div class="relative z-10 flex min-h-[24rem] flex-col md:min-h-[28rem]">
+    <div class="relative z-10 flex min-h-96 flex-col md:min-h-112">
       <p class="font-mono text-brand-accent text-base tracking-wide uppercase">
         <span class="font-black font-display text-brand text-hero"
           >.
@@ -90,6 +98,7 @@ const testimonials = testimonialContent.map((testimonial, index) => ({
     </div>
   </div>
 
+  <!-- Next button for desktop carousel navigation. -->
   <button
     class="absolute -right-3 top-1/2 z-20 hidden -translate-y-1/2 text-dark-primary transition-colors hover:text-brand focus:outline-none focus:ring-2 focus:ring-brand md:block"
     type="button"
@@ -99,6 +108,7 @@ const testimonials = testimonialContent.map((testimonial, index) => ({
     <span class="block text-hero leading-none">&gt;</span>
   </button>
 
+  <!-- Dot navigation for choosing a specific testimonial. -->
   <div
     class="mt-6 flex items-center justify-center gap-3"
     aria-label="Choose testimonial"
@@ -123,6 +133,7 @@ const testimonials = testimonialContent.map((testimonial, index) => ({
 </div>
 
 <script>
+  // Shape of the testimonial data stored on the carousel element.
   type Testimonial = {
     city: string;
     country: string;
@@ -132,9 +143,11 @@ const testimonials = testimonialContent.map((testimonial, index) => ({
     image: string;
   };
 
+  // Find every testimonial carousel on the page so the component can be reused.
   const carousels = document.querySelectorAll("[data-testimonials-carousel]");
 
   carousels.forEach((carousel) => {
+    // Read the server-rendered testimonial data and cache important DOM elements.
     const testimonials = JSON.parse(
       carousel.getAttribute("data-testimonials") || "[]",
     ) as Testimonial[];
@@ -151,6 +164,7 @@ const testimonials = testimonialContent.map((testimonial, index) => ({
     let touchStartX = 0;
     let touchStartY = 0;
 
+    // Update the visible quote, background image, and active dot.
     const showTestimonial = (index: number) => {
       if (!testimonials.length) {
         return;
@@ -183,6 +197,7 @@ const testimonials = testimonialContent.map((testimonial, index) => ({
       });
     };
 
+    // Move through testimonials with the desktop arrow buttons.
     previousButton?.addEventListener("click", () => {
       showTestimonial(activeIndex - 1);
     });
@@ -191,6 +206,7 @@ const testimonials = testimonialContent.map((testimonial, index) => ({
       showTestimonial(activeIndex + 1);
     });
 
+    // Store the starting touch position for mobile swipe navigation.
     panel?.addEventListener(
       "touchstart",
       (event) => {
@@ -201,6 +217,7 @@ const testimonials = testimonialContent.map((testimonial, index) => ({
       { passive: true },
     );
 
+    // Change testimonials when the user swipes mostly sideways.
     panel?.addEventListener(
       "touchend",
       (event) => {
@@ -217,6 +234,7 @@ const testimonials = testimonialContent.map((testimonial, index) => ({
       { passive: true },
     );
 
+    // Let each dot jump directly to its matching testimonial.
     dots.forEach((dot) => {
       dot.addEventListener("click", () => {
         showTestimonial(Number(dot.getAttribute("data-index")));

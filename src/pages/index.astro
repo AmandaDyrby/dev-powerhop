@@ -1,4 +1,5 @@
 ---
+// Page layout, reusable components, and visual assets for the homepage.
 import Layout from "../layouts/Layout.astro";
 import Button from "../components/Button.astro";
 import Accordion from "../components/Accordion.astro";
@@ -15,6 +16,7 @@ import { Image } from "astro:assets";
 ---
 
 <Layout Page="Home" Title="Home">
+  <!-- Hero section: full-screen introduction with background image and call to action. -->
   <div
     id="heroSection"
     class="relative left-1/2 ml-[-50vw] flex w-screen flex-col justify-center overflow-hidden pt-16 pb-8 md:min-h-screen"
@@ -50,6 +52,7 @@ import { Image } from "astro:assets";
       <img src={Arrow.src} alt="" />
     </a>
   </div>
+  <!-- Product discovery section: introduces the Power/Hop series visually. -->
   <div
     id="discoverSection"
     class="relative left-1/2 mb-12 ml-[-50vw] w-screen overflow-hidden py-10 before:absolute before:inset-[6.5rem_0_1.5rem_0] before:bg-brand-accent before:content-[''] before:[clip-path:polygon(0_20%,100%_0,100%_80%,0_100%)] after:absolute after:inset-[8.5rem_45%_4rem_0] after:bg-(image:--starPattern) after:bg-size-[7rem] after:bg-repeat after:opacity-80 after:content-[''] md:before:inset-[6rem_0_3rem_0] md:after:inset-[10rem_58%_5rem_0] md:after:bg-size-[8rem]"
@@ -79,6 +82,7 @@ import { Image } from "astro:assets";
       </div>
     </div>
   </div>
+  <!-- Product summary card: explains how the Power/Hop units work. -->
   <div class="m-6 bg-light-bg p-6 border border-light-subtle">
     <h2 class="font-display text-light-primary text-4xl font-black">
       Introducing the POWER/HOP series:
@@ -96,6 +100,7 @@ import { Image } from "astro:assets";
       <Button href="/services/" variant={1} text="Models →" />
     </div>
   </div>
+  <!-- Value points: highlights subscription benefits for customers. -->
   <div
     class="m-6 md:grid-cols-3 grid md:gap-12 mx-12 mt-12 mb-8 bg-white full-bleed-bg pt-8 pb-4"
   >
@@ -133,9 +138,11 @@ import { Image } from "astro:assets";
       </p>
     </div>
   </div>
+  <!-- Use-case accordion: shows what the product can power. -->
   <div class="m-6">
     <AccordionWhatAmIUsedFor />
   </div>
+  <!-- Testimonials section: shares customer stories in the carousel component. -->
   <div class="m-6 p-6 bg-dark-bg full-bleed-bg-black text-dark-primary">
     <div class="md:mx-auto md:max-w-4xl">
       <h2
@@ -184,6 +191,7 @@ import { Image } from "astro:assets";
       />
     </div>
   </div>
+  <!-- About preview: links visitors from the homepage to the About page. -->
   <div class="p-6 md:grid-cols-2 grid md:gap-6">
     <h2
       class="font-display text-hero text-light-primary font-black pb-4 md:col-span-2"
@@ -211,10 +219,12 @@ import { Image } from "astro:assets";
 </Layout>
 
 <style define:vars={{ starPattern: `url(${Star.src})` }}>
+  /* Smooth anchor scrolling for the hero chevron link. */
   html {
     scroll-behavior: smooth;
   }
 
+  /* Homepage hero positioning and fallback background while the image loads. */
   #heroSection {
     margin-top: -2rem;
     padding-top: 6rem;
@@ -225,6 +235,7 @@ import { Image } from "astro:assets";
     scroll-margin-top: 1rem;
   }
 
+  /* Full-bleed section backgrounds that extend past the centered content width. */
   .full-bleed-bg {
     box-shadow: 0 0 0 100vmax #ffffff;
     clip-path: inset(0 -100vmax);
@@ -235,12 +246,14 @@ import { Image } from "astro:assets";
     clip-path: inset(0 -100vmax);
   }
 
+  /* Repeating star decoration used in the value points section. */
   .star-bg {
     background-image: var(--starPattern);
     background-repeat: no-repeat;
     background-position: right top;
   }
 
+  /* Animated chevron that draws attention to the next section. */
   .chevronanimation {
     display: block;
     animation: soft-chevron-bounce 1.8s ease-in-out infinite;
@@ -263,6 +276,7 @@ import { Image } from "astro:assets";
     }
   }
 
+  /* Respect users who prefer reduced motion. */
   @media (prefers-reduced-motion: reduce) {
     html {
       scroll-behavior: auto;
